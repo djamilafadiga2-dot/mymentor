@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Scholarships · MyMentor</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/theme.css" />
+</head>
+<body>
+
+<div class="app-shell">
+  <nav class="sidebar" id="mm-sidebar"></nav>
+
+  <main class="main">
+    <div class="page-eyebrow">Funding your studies</div>
+    <h1 class="page-title">Scholarships</h1>
+    <p class="page-sub">A starting list of funding routes worth checking. Full scholarship matching and application support is coming to this panel soon.</p>
+
+    <div class="grid-2 mt-32">
+      <div class="card card-pad">
+        <h3 style="font-size:17px;">Chevening Scholarships</h3>
+        <p class="small muted mt-8">UK government's global scholarship programme — fully-funded, but note it targets Master's study, not undergraduate. Worth planning toward.</p>
+      </div>
+      <div class="card card-pad">
+        <h3 style="font-size:17px;">University-specific scholarships</h3>
+        <p class="small muted mt-8">Most UK universities offer international/merit scholarships (e.g. Global Excellence, means-tested bursaries). Check each university's page in your shortlist.</p>
+      </div>
+      <div class="card card-pad">
+        <h3 style="font-size:17px;">Employer & corporate sponsorship</h3>
+        <p class="small muted mt-8">Some Ivorian companies sponsor students who commit to returning — ask your school's careers advisor about local programmes.</p>
+      </div>
+      <div class="card card-pad" style="border-color: var(--brand-500); background: var(--brand-100);">
+        <h3 style="font-size:17px;">Want a personalised scholarship plan?</h3>
+        <p class="small mt-8" style="color:#2a2f77;">Message us directly and we'll help you find and apply to scholarships that match your profile.</p>
+        <a class="btn btn-brand btn-sm mt-16" href="https://wa.me/447946869841" target="_blank" rel="noopener">Message on WhatsApp →</a>
+      </div>
+    </div>
+  </main>
+</div>
+
+<script src="assets/js/app.js"></script>
+<script>
+  const user = MMApp.requireUser();
+  if (user) MMApp.renderSidebar('scholarships');
+</script>
+</body>
+</html>
+
