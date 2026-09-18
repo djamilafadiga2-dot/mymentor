@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Dashboard · MyMentor</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/theme.css" />
+</head>
+<body>
+
+<div class="app-shell">
+  <nav class="sidebar" id="mm-sidebar"></nav>
+
+  <main class="main">
+    <div class="page-eyebrow">Your journey</div>
+    <h1 class="page-title" id="mm-greeting">Welcome back</h1>
+    <p class="page-sub">Here's where things stand across your UK application. Pick up wherever you left off.</p>
+
+    <!-- Overall progress -->
+    <div class="card card-pad mt-32">
+      <div class="between">
+        <div>
+          <div class="small muted" style="font-weight:600; letter-spacing:.02em;">OVERALL APPLICATION READINESS</div>
+          <div style="font-family:var(--font-display); font-size:28px; margin-top:4px;" id="mm-overall-pct">0%</div>
+        </div>
+        <div class="row" style="gap:22px;">
+          <div class="stack" style="align-items:center; gap:2px;">
+            <div style="font-size:20px; font-weight:700; color:var(--ink-950);" id="mm-stat-shortlist">0</div>
+            <div class="small muted">Shortlisted</div>
+          </div>
+          <div class="stack" style="align-items:center; gap:2px;">
+            <div style="font-size:20px; font-weight:700; color:var(--ink-950);" id="mm-stat-ps">0/3</div>
+            <div class="small muted">PS answers drafted</div>
+          </div>
+          <div class="stack" style="align-items:center; gap:2px;">
+            <div style="font-size:20px; font-weight:700; color:var(--ink-950);" id="mm-stat-checklist">0/0</div>
+            <div class="small muted">Checklist items</div>
+          </div>
+        </div>
+      </div>
+      <div class="progress-track mt-16">
+        <div class="progress-fill" id="mm-overall-fill" style="width:0%"></div>
+      </div>
+    </div>
+
+    <!-- Three core panels -->
+    <div class="grid-3 mt-32" id="mm-core-panels"></div>
+
+    <!-- Secondary panels -->
+    <div class="page-eyebrow mt-32" style="margin-top:40px;">Also part of your plan</div>
+    <div class="grid-2 mt-16" id="mm-secondary-panels"></div>
+  </main>
+</div>
+
+<script src="assets/js/app.js"></script>
+<script src="assets/js/data/universities.js"></script>
+<script>
+  const user = MMApp.requireUser();
+  if (user) {
+    document.getElementById('mm-greeting').textContent = `Welcome back, ${user.fullName ? user.fullName.split(' ')[0] : ''}`.trim();
+    MMApp.renderSidebar('dashboard');
+
+    const progress = MMApp.getProgress(user);
+    const shortlist = progress.shortlist || [];
+    const psAnswers = progress.psAnswers || {}; // { course: '', uniA: '', uniB: '' }
+    const checklist = progress.checklist || {}; // { itemId: true }
+    const CHECKLIST_TOTAL = 8; // mirrors ucas-checklist.html item count
+
+    const psDraftedCount = ['course', 'uniA', 'uniB'].filter(k => (psAnswers[k] || '').trim().length > 0).length;
+    const checklistDone = Object.values(checklist).filter(Boolean).length;
+
+    document.getElementById('mm-stat-shortlist').textContent = shortlist.length;
+    document.getElementById('mm-stat-ps').textContent = `${psDraftedCount}/3`;
+    document.getElementById('mm-stat-checklist').textContent = `${checklistDone}/${CHECKLIST_TOTAL}`;
+
+    const overallSteps = 3 /* PS */ + CHECKLIST_TOTAL + (shortlist.length > 0 ? 3 : 0);
+    const overallDone = psDraftedCount + checklistDone + (shortlist.length > 0 ? 3 : 0);
+    const overallPct = overallSteps ? Math.round((overallDone / overallSteps) * 100) : 0;
+    document.getElementById('mm-overall-pct').textContent = `${overallPct}%`;
+    document.getElementById('mm-overall-fill').style.width = `${overallPct}%`;
+
+    // ---- Core panel cards ----
+    const corePanels = [
+      {
+        icon: '🎓',
+        title: 'Choose Your Universities',
+        desc: `${allUniversitiesFlat().length} UK universities, filterable by tier, with detailed profiles for each.`,
+        status: shortlist.length > 0
+          ? { pill: 'pill-done', text: `${shortlist.length} shortlisted` }
+          : { pill: 'pill-todo', text: 'Not started' },
+        cta: 'Browse universities',
+        href: 'universities.html'
+      },
+      {
+        icon: '✎',
+        title: 'Personal Statement',
+        desc: 'The 2026 UCAS format: your course motivation, plus two university-specific answers.',
+        status: psDraftedCount === 3
+          ? { pill: 'pill-done', text: 'All 3 drafted' }
+          : psDraftedCount > 0
+            ? { pill: 'pill-warn', text: `${psDraftedCount}/3 drafted` }
+            : { pill: 'pill-todo', text: 'Not started' },
+        cta: 'Open workspace',
+        href: 'personal-statement-guide.html'
+      },
+      {
+        icon: '☑',
+        title: 'UCAS Checklist',
+        desc: 'Everything you need before your profile is application-ready, step by step.',
+        status: checklistDone === CHECKLIST_TOTAL
+          ? { pill: 'pill-done', text: 'Complete' }
+          : checklistDone > 0
+            ? { pill: 'pill-warn', text: `${checklistDone}/${CHECKLIST_TOTAL} done` }
+            : { pill: 'pill-todo', text: 'Not started' },
+        cta: 'View checklist',
+        href: 'ucas-checklist.html'
+      }
+    ];
+
+    document.getElementById('mm-core-panels').innerHTML = corePanels.map(p => `
+      <div class="card card-pad">
+        <div style="font-size:28px;">${p.icon}</div>
+        <h3 style="font-size:19px; margin-top:14px;">${p.title}</h3>
+        <p class="small muted" style="margin-top:8px; line-height:1.55;">${p.desc}</p>
+        <div class="between mt-24">
+          <span class="pill ${p.status.pill}">${p.status.text}</span>
+          <a class="btn btn-primary btn-sm" href="${p.href}">${p.cta} →</a>
+        </div>
+      </div>
+    `).join('');
+
+    // ---- Secondary panel cards ----
+    const secondaryPanels = [
+      {
+        icon: '🗣',
+        title: 'English Certification',
+        desc: 'IELTS, TOEFL and Cambridge — requirements, prep material and booking guidance.',
+        href: 'english-certifications-guide.html'
+      },
+      {
+        icon: '✦',
+        title: 'Scholarships',
+        desc: 'Find funding you qualify for and build a plan to apply before deadlines.',
+        href: 'scholarships.html'
+      }
+    ];
+
+    document.getElementById('mm-secondary-panels').innerHTML = secondaryPanels.map(p => `
+      <a class="card card-pad row" href="${p.href}" style="gap:18px; align-items:flex-start;">
+        <div style="font-size:24px;">${p.icon}</div>
+        <div>
+          <h3 style="font-size:16.5px;">${p.title}</h3>
+          <p class="small muted" style="margin-top:6px;">${p.desc}</p>
+        </div>
+      </a>
+    `).join('');
+  }
+</script>
+</body>
+</html>
