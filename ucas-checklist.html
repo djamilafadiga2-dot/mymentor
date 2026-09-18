@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>UCAS Checklist · MyMentor</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/theme.css" />
+<style>
+  .checklist-group { margin-top: 28px; }
+  .group-title { font-size: 13px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: var(--ink-700); margin-bottom: 12px; }
+  .check-item {
+    display: flex; align-items: flex-start; gap: 14px;
+    padding: 16px 18px; border: 1px solid var(--line); border-radius: var(--radius-md);
+    background: var(--paper); margin-bottom: 10px; cursor: pointer;
+    transition: border-color .15s ease, background .15s ease;
+  }
+  .check-item:hover { border-color: var(--line-strong); }
+  .check-item.done { background: var(--ok-bg); border-color: #bfe2cd; }
+  .check-box {
+    width: 22px; height: 22px; border-radius: 6px; border: 2px solid var(--line-strong);
+    flex-shrink: 0; margin-top: 1px; display: flex; align-items: center; justify-content: center;
+    font-size: 13px; color: #fff; transition: all .15s ease;
+  }
+  .check-item.done .check-box { background: var(--ok); border-color: var(--ok); }
+  .check-title { font-weight: 600; font-size: 15px; color: var(--ink-950); }
+  .check-desc { font-size: 13.5px; color: var(--muted); margin-top: 3px; line-height: 1.5; }
+  .check-deadline { font-size: 12px; color: var(--brand-700); font-weight: 600; margin-top: 6px; }
+</style>
+</head>
+<body>
+
+<div class="app-shell">
+  <nav class="sidebar" id="mm-sidebar"></nav>
+
+  <main class="main">
+    <div class="page-eyebrow">Application readiness</div>
+    <h1 class="page-title">UCAS Checklist</h1>
+    <p class="page-sub">Everything you need to have ready before — and during — your UCAS application. Check items off as you complete them; your progress is saved automatically.</p>
+
+    <div class="card card-pad mt-24">
+      <div class="between">
+        <div class="small muted" style="font-weight:600;">YOUR PROGRESS</div>
+        <div class="small" id="cl-count" style="font-weight:700; color:var(--ink-950);">0 / 0</div>
+      </div>
+      <div class="progress-track mt-8">
+        <div class="progress-fill" id="cl-fill" style="width:0%"></div>
+      </div>
+    </div>
+
+    <div id="cl-groups"></div>
+  </main>
+</div>
+
+<script src="assets/js/app.js"></script>
+<script>
+  const user = MMApp.requireUser();
+
+  const CHECKLIST = [
+    { group: 'Before you start', items: [
+      { id: 'account', title: 'Create your UCAS Hub account', desc: 'Register at ucas.com — use an email you check daily; this is where all offers and decisions arrive.' },
+      { id: 'shortlist', title: 'Shortlist up to 5 universities', desc: 'UCAS allows a maximum of 5 choices. Balance 1–2 ambitious picks with realistic and safe options.', link: { href: 'universities.html', text: 'Browse universities' } }
+    ]},
+    { group: 'Your documents', items: [
+      { id: 'ps', title: 'Draft your personal statement', desc: 'Course motivation + two university-specific answers, under the current 2026 format.', link: { href: 'personal-statement-guide.html', text: 'Open PS workspace' } },
+      { id: 'reference', title: 'Request your academic reference', desc: 'Ask a teacher or counsellor early — references can take several weeks, especially near deadlines.' },
+      { id: 'english-test', title: 'Book your English test', desc: 'IELTS, TOEFL or Cambridge — check each university's minimum score before booking.', link: { href: 'english-certifications-guide.html', text: 'English cert guide' } },
+      { id: 'transcript', title: 'Gather transcripts & predicted grades', desc: 'Your school will submit predicted grades directly, but keep your own copies of past results.' }
+    ]},
+    { group: 'Before you submit', items: [
+      { id: 'deadline', title: 'Confirm your deadline', desc: '15 October for Oxford, Cambridge and most medicine/dentistry courses; 25 January for the majority of programmes (incl. business, finance, economics, management).', deadline: 'Check per-course deadlines' },
+      { id: 'scholarships', title: 'Check scholarship eligibility', desc: 'Some scholarships (e.g. Chevening) have separate, earlier deadlines — start looking now.', link: { href: 'scholarships.html', text: 'Explore scholarships' } }
+    ]}
+  ];
+
+  if (user) {
+    MMApp.renderSidebar('ucas-checklist');
+
+    let progress = MMApp.getProgress(user);
+    let checklist = progress.checklist || {};
+
+    const totalItems = CHECKLIST.reduce((n, g) => n + g.items.length, 0);
+
+    function renderProgress() {
+      const done = Object.values(checklist).filter(Boolean).length;
+      document.getElementById('cl-count').textContent = `${done} / ${totalItems}`;
+      document.getElementById('cl-fill').style.width = `${totalItems ? (done / totalItems) * 100 : 0}%`;
+    }
+
+    function renderGroups() {
+      const container = document.getElementById('cl-groups');
+      container.innerHTML = CHECKLIST.map(g => `
+        <div class="checklist-group">
+          <div class="group-title">${g.group}</div>
+          ${g.items.map(item => `
+            <div class="check-item ${checklist[item.id] ? 'done' : ''}" data-id="${item.id}">
+              <div class="check-box">${checklist[item.id] ? '✓' : ''}</div>
+              <div style="flex:1;">
+                <div class="check-title">${item.title}</div>
+                <div class="check-desc">${item.desc}</div>
+                ${item.deadline ? `<div class="check-deadline">${item.deadline}</div>` : ''}
+                ${item.link ? `<a href="${item.link.href}" class="small" style="color:var(--ink-800); font-weight:600; text-decoration:underline; display:inline-block; margin-top:8px;" onclick="event.stopPropagation()">${item.link.text} →</a>` : ''}
+              </div>
+            </div>
+          `).join('')}
+        </div>
+      `).join('');
+
+      container.querySelectorAll('.check-item').forEach(el => {
+        el.addEventListener('click', () => {
+          const id = el.dataset.id;
+          checklist[id] = !checklist[id];
+          progress = MMApp.setProgress(user, { checklist });
+          renderGroups();
+          renderProgress();
+        });
+      });
+    }
+
+    renderGroups();
+    renderProgress();
+  }
+</script>
+</body>
+</html>
