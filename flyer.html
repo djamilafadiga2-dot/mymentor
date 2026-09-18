@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>University Profile · MyMentor</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/theme.css" />
+<style>
+  .fl-hero { display: flex; align-items: flex-start; justify-content: space-between; gap: 20px; flex-wrap: wrap; }
+  .fl-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 24px; }
+  .fl-stat { text-align: center; }
+  .fl-stat .num { font-family: var(--font-display); font-size: 26px; color: var(--ink-950); }
+  .fl-stat .lab { font-size: 11.5px; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); margin-top: 4px; }
+  .fl-chip-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+  .fl-chip { padding: 6px 13px; border-radius: 999px; background: var(--ink-100); color: var(--ink-700); font-size: 12.5px; font-weight: 600; }
+  .fl-info-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px 28px; margin-top: 8px; }
+  .fl-info-item .lab { font-size: 12px; font-weight: 700; color: var(--brand-700); text-transform: uppercase; letter-spacing: .03em; margin-bottom: 3px; }
+  .fl-info-item .val { font-size: 14px; color: var(--ink); line-height: 1.5; }
+  .fl-sub { margin-top: 22px; }
+  .fl-sub-title { font-size: 13px; font-weight: 700; color: var(--ink-800); margin-bottom: 8px; }
+  .fl-list { color: var(--muted); font-size: 13.5px; line-height: 1.7; }
+  .fl-pros-cons { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; margin-top: 8px; }
+  .fl-pros, .fl-cons { border-radius: var(--radius-md); padding: 18px; }
+  .fl-pros { background: var(--ok-bg); }
+  .fl-cons { background: var(--warn-bg); }
+  .fl-pros h4 { color: var(--ok); font-size: 14px; margin-bottom: 8px; }
+  .fl-cons h4 { color: var(--warn); font-size: 14px; margin-bottom: 8px; }
+  .fl-pros ul, .fl-cons ul { list-style: none; padding: 0; font-size: 13px; line-height: 1.8; color: var(--ink); }
+  .fl-pros li::before { content: '✓ '; color: var(--ok); font-weight: 700; }
+  .fl-cons li::before { content: '! '; color: var(--warn); font-weight: 700; }
+  .fl-shortlist-btn.on { background: var(--brand-600); color: #fff; border-color: var(--brand-600); }
+  @media (max-width: 700px) {
+    .fl-stats, .fl-info-grid, .fl-pros-cons { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="app-shell">
+  <nav class="sidebar" id="mm-sidebar"></nav>
+
+  <main class="main" id="fl-main">
+    <div id="fl-content"></div>
+  </main>
+</div>
+
+<script src="assets/js/app.js"></script>
+<script src="assets/js/data/universities.js"></script>
+<script src="assets/js/data/flyer-data.js"></script>
+<script>
+  const user = MMApp.requireUser();
+
+  if (user) {
+    MMApp.renderSidebar('universities');
+
+    const params = new URLSearchParams(window.location.search);
+    const id = params.get('id');
+    const flat = allUniversitiesFlat();
+    const base = flat.find(u => u.id === id);
+    const detail = (typeof FLYER_DATA !== 'undefined') ? FLYER_DATA[id] : null;
+
+    const root = document.getElementById('fl-content');
+
+    if (!base) {
+      root.innerHTML = `
+        <div class="page-eyebrow">Universities</div>
+        <h1 class="page-title">Profile not found</h1>
+        <p class="page-sub">We couldn't find that university. <a href="universities.html" style="color:var(--ink-800); font-weight:600; text-decoration:underline;">← Back to all universities</a></p>
+      `;
+    } else {
+      let progress = MMApp.getProgress(user);
+      let shortlist = progress.shortlist || [];
+
+      function renderShortlistBtn() {
+        const isOn = shortlist.includes(base.id);
+        return `<button class="btn btn-ghost fl-shortlist-btn ${isOn ? 'on' : ''}" id="fl-shortlist-btn">${isOn ? '✓ Shortlisted' : '+ Add to shortlist'}</button>`;
+      }
+
+      function infoGrid(info) {
+        if (!info || !Object.keys(info).length) return '';
+        return `<div class="fl-info-grid">${Object.entries(info).map(([k, v]) => `
+          <div class="fl-info-item"><div class="lab">${k}</div><div class="val">${v}</div></div>
+        `).join('')}</div>`;
+      }
+
+      function chipRow(items) {
+        if (!items || !items.length) return '';
+        return `<div class="fl-chip-row">${items.map(c => `<span class="fl-chip">${c}</span>`).join('')}</div>`;
+      }
+
+      function labeledList(groups) {
+        if (!groups || !groups.length) return '';
+        return groups.map(g => `
+          <div class="fl-sub">
+            ${g.label ? `<div class="fl-sub-title">${g.label}</div>` : ''}
+            <div class="fl-list">${(g.items || []).join(' • ')}</div>
+          </div>
+        `).join('');
+      }
+
+      if (!detail) {
+        // No extracted flyer content yet for this university — show the basics we have.
+        root.innerHTML = `
+          <div class="page-eyebrow">${(TIER_META[base.tier] || {}).label || 'University'}</div>
+          <div class="fl-hero">
+            <div>
+              <h1 class="page-title">${base.name}</h1>
+              <p class="page-sub">${base.description}</p>
+            </div>
+            ${renderShortlistBtn()}
+          </div>
+          <div class="card card-pad mt-32">
+            <p class="small muted">We haven't finished building out the detailed profile for ${base.name} yet — rankings, entry requirements, tuition, and career outcomes are coming soon. In the meantime, message us on WhatsApp and we'll send you what we have.</p>
+            <a class="btn btn-brand btn-sm mt-16" href="https://wa.me/447946869841" target="_blank" rel="noopener">Ask us on WhatsApp →</a>
+          </div>
+          <div class="mt-24"><a href="universities.html" style="color:var(--ink-800); font-weight:600; text-decoration:underline; font-size:13.5px;">← Back to all universities</a></div>
+        `;
+      } else {
+        root.innerHTML = `
+          <div class="page-eyebrow">${(TIER_META[base.tier] || {}).label || 'University'}</div>
+          <div class="fl-hero">
+            <div>
+              <h1 class="page-title">${detail.name}</h1>
+              <p class="page-sub">${detail.tagline}</p>
+            </div>
+            ${renderShortlistBtn()}
+          </div>
+
+          <div class="fl-stats">
+            ${detail.stats.map(s => `<div class="fl-stat"><div class="num">${s.num}</div><div class="lab">${s.label}</div></div>`).join('')}
+          </div>
+
+          <div class="card card-pad mt-32">
+            <h3 style="font-size:17px;">About</h3>
+            <p class="small" style="margin-top:10px; line-height:1.7; color:var(--ink);">${detail.about}</p>
+          </div>
+
+          ${detail.programmes && detail.programmes.length ? `
+          <div class="card card-pad mt-24">
+            <h3 style="font-size:17px;">${detail.programmesTitle}</h3>
+            ${chipRow(detail.programmes)}
+          </div>` : ''}
+
+          ${(detail.extra || []).map(ex => `
+          <div class="card card-pad mt-24">
+            <h3 style="font-size:17px;">${ex.title}</h3>
+            ${labeledList(ex.items)}
+          </div>`).join('')}
+
+          <div class="card card-pad mt-24">
+            <h3 style="font-size:17px;">Key Information</h3>
+            ${infoGrid(detail.info)}
+          </div>
+
+          ${detail.companies && detail.companies.length ? `
+          <div class="card card-pad mt-24">
+            <h3 style="font-size:17px;">${detail.companiesTitle}</h3>
+            ${chipRow(detail.companies)}
+          </div>` : ''}
+
+          <div class="card card-pad mt-24">
+            <h3 style="font-size:17px;">Student Life</h3>
+            ${labeledList(detail.studentLife)}
+          </div>
+
+          <div class="card card-pad mt-24">
+            <h3 style="font-size:17px;">Strengths &amp; Considerations</h3>
+            <div class="fl-pros-cons">
+              <div class="fl-pros"><h4>Strengths</h4><ul>${(detail.pros || []).map(p => `<li>${p}</li>`).join('')}</ul></div>
+              <div class="fl-cons"><h4>Considerations</h4><ul>${(detail.cons || []).map(c => `<li>${c}</li>`).join('')}</ul></div>
+            </div>
+          </div>
+
+          <div class="card card-pad mt-24" style="margin-bottom:32px;">
+            <h3 style="font-size:17px;">Career Outcomes</h3>
+            ${labeledList(detail.career)}
+          </div>
+
+          <div class="mt-24" style="margin-bottom:40px;"><a href="universities.html" style="color:var(--ink-800); font-weight:600; text-decoration:underline; font-size:13.5px;">← Back to all universities</a></div>
+        `;
+      }
+
+      const btn = document.getElementById('fl-shortlist-btn');
+      if (btn) {
+        btn.addEventListener('click', () => {
+          const isOn = shortlist.includes(base.id);
+          shortlist = isOn ? shortlist.filter(x => x !== base.id) : [...shortlist, base.id];
+          progress = MMApp.setProgress(user, { shortlist });
+          btn.classList.toggle('on', !isOn);
+          btn.textContent = !isOn ? '✓ Shortlisted' : '+ Add to shortlist';
+        });
+      }
+    }
+  }
+</script>
+</body>
+</html>
+
