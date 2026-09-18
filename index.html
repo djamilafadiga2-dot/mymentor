@@ -1,6 +1,267 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>MyMentor · Sécuriser son avenir dès la 1ère année</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/theme.css" />
+<style>
+  body { background: var(--paper); }
+  .lp-wrap { max-width: 1160px; margin: 0 auto; padding: 0 24px; }
+
+  .lp-topbar { display: flex; align-items: center; justify-content: space-between; padding: 22px 0; }
+  .lp-brand { font-family: var(--font-display); font-weight: 600; font-size: 21px; color: var(--ink-950); }
+  .lp-brand span { color: var(--brand-500); }
+  .lp-auth { display: flex; gap: 12px; }
+
+  .lp-hero { text-align: center; padding: 64px 0 20px; }
+  .lp-eyebrow {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 6px 14px; border-radius: 999px;
+    background: var(--brand-100); color: var(--brand-700);
+    font-size: 12.5px; font-weight: 700; letter-spacing: .03em; text-transform: uppercase;
+    margin-bottom: 22px;
+  }
+  .lp-hero h1 { font-size: 52px; letter-spacing: -0.02em; line-height: 1.08; }
+  .lp-hero .tagline {
+    font-family: var(--font-display); font-weight: 500; font-style: italic;
+    font-size: 22px; color: var(--brand-700); margin-top: 14px;
+  }
+  .lp-hero .lede { max-width: 640px; margin: 22px auto 0; color: var(--muted); font-size: 16px; line-height: 1.7; }
+  .lp-hero .lede .hl { color: var(--ink-950); font-weight: 700; }
+
+  .lp-section { padding: 56px 0; }
+  .lp-section-head { text-align: center; max-width: 620px; margin: 0 auto 36px; }
+  .lp-section-head .eyebrow2 { font-size: 12.5px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--brand-700); margin-bottom: 8px; }
+  .lp-section-head h2 { font-size: 30px; }
+
+  .lp-problem-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; }
+  .lp-problem-card { background: var(--canvas); border: 1px solid var(--line); border-radius: var(--radius-lg); padding: 26px; transition: transform .18s ease, box-shadow .18s ease; }
+  .lp-problem-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); }
+  .lp-problem-card .emoji { font-size: 26px; margin-bottom: 12px; }
+  .lp-problem-card h3 { font-size: 15.5px; margin-bottom: 8px; }
+  .lp-problem-card p { font-size: 13.5px; color: var(--muted); line-height: 1.6; }
+
+  .lp-stats { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+  .lp-stat-card {
+    background: var(--ink-950); border-radius: var(--radius-lg); padding: 34px 30px;
+    text-align: center; color: #fff; position: relative; overflow: hidden;
+  }
+  .lp-stat-card::after {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(135deg, rgba(74,92,230,.35), rgba(45,212,191,.15) 55%, transparent 80%);
+  }
+  .lp-stat-card .num { font-family: var(--font-display); font-size: 40px; font-weight: 600; position: relative; }
+  .lp-stat-card .lab { font-size: 14px; color: #cfdaf0; margin-top: 8px; position: relative; }
+
+  .lp-solution-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+  .lp-solution-card { background: var(--paper); border: 1px solid var(--line); border-radius: var(--radius-lg); padding: 30px; box-shadow: var(--shadow-sm); }
+  .lp-solution-num {
+    width: 40px; height: 40px; border-radius: 12px;
+    background: var(--brand-100); color: var(--brand-700);
+    font-family: var(--font-display); font-weight: 600; font-size: 17px;
+    display: flex; align-items: center; justify-content: center; margin-bottom: 16px;
+  }
+  .lp-solution-card h3 { font-size: 17px; margin-bottom: 14px; }
+  .lp-solution-card ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+  .lp-solution-card li { font-size: 13.5px; color: var(--ink); line-height: 1.5; padding-left: 22px; position: relative; }
+  .lp-solution-card li::before { content: '✓'; position: absolute; left: 0; color: var(--ok); font-weight: 700; }
+
+  .lp-team-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 24px; }
+  .lp-team-card { background: var(--canvas); border: 1px solid var(--line); border-radius: var(--radius-lg); padding: 34px; text-align: center; }
+  .lp-team-avatar {
+    width: 56px; height: 56px; border-radius: 50%; margin: 0 auto 16px;
+    background: linear-gradient(135deg, var(--brand-600), var(--brand-500));
+    display: flex; align-items: center; justify-content: center;
+    color: #fff; font-weight: 700; font-size: 19px;
+  }
+  .lp-team-card .name { font-size: 20px; margin-bottom: 6px; }
+  .lp-team-card .school { font-size: 13.5px; color: var(--brand-700); font-weight: 600; line-height: 1.5; margin-bottom: 18px; }
+  .lp-team-card .school small { display: block; color: var(--muted); font-weight: 500; margin-top: 2px; }
+  .lp-team-list { list-style: none; text-align: left; display: flex; flex-direction: column; gap: 9px; }
+  .lp-team-list li { font-size: 13.5px; color: var(--ink); padding-left: 22px; position: relative; line-height: 1.5; }
+  .lp-team-list li::before { content: '›'; position: absolute; left: 2px; color: var(--brand-500); font-weight: 800; }
+
+  .lp-closer { text-align: center; max-width: 700px; margin: 44px auto 0; font-size: 16px; line-height: 1.75; color: var(--ink); }
+  .lp-closer .hl { color: var(--ink-950); font-weight: 700; }
+
+  .lp-cta-band {
+    background: var(--ink-950); border-radius: var(--radius-lg);
+    padding: 56px 30px; text-align: center; margin: 20px 0 60px;
+    position: relative; overflow: hidden;
+  }
+  .lp-cta-band::after {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(120deg, rgba(74,92,230,.35), rgba(45,212,191,.18) 50%, rgba(110,231,168,.12));
+  }
+  .lp-cta-band h2 { color: #fff; font-size: 28px; position: relative; margin-bottom: 22px; }
+  .lp-cta-btn {
+    position: relative; display: inline-flex; align-items: center; gap: 10px;
+    background: linear-gradient(90deg, var(--brand-600), var(--brand-500));
+    color: #fff; padding: 16px 36px; border-radius: 999px;
+    font-weight: 700; font-size: 15.5px; box-shadow: var(--shadow-lg);
+    transition: transform .15s ease;
+  }
+  .lp-cta-btn:hover { transform: translateY(-2px); }
+
+  @media (max-width: 700px) {
+    .lp-hero h1 { font-size: 36px; }
+    .lp-stats { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="lp-wrap">
+  <div class="lp-topbar">
+    <div class="lp-brand">My<span>Mentor</span></div>
+    <div class="lp-auth">
+      <a href="signup.html#login" class="btn btn-ghost btn-sm">Log In</a>
+      <a href="signup.html#signup" class="btn btn-primary btn-sm">Sign Up</a>
+    </div>
+  </div>
+
+  <div class="lp-hero">
+    <div class="lp-eyebrow">🇨🇮 Pour les étudiants ivoiriens à Londres</div>
+    <h1>MyMentor</h1>
+    <div class="tagline">Sécuriser son avenir dès la 1ère année</div>
+    <p class="lede">Le succès dans la finance et le conseil à Londres ne dépend pas uniquement du talent académique. <span class="hl">La vraie clé ? Avoir les bonnes informations au bon moment et savoir comment se préparer.</span></p>
+  </div>
+</div>
+
+<div class="lp-wrap">
+  <div class="lp-section">
+    <div class="lp-section-head">
+      <div class="eyebrow2">Le Constat</div>
+      <h2>Ce qui bloque le plus d'étudiants</h2>
+    </div>
+    <div class="lp-problem-grid">
+      <div class="lp-problem-card">
+        <div class="emoji">🔍</div>
+        <h3>Information limitée</h3>
+        <p>Les opportunités internationales restent méconnues depuis l'Afrique</p>
+      </div>
+      <div class="lp-problem-card">
+        <div class="emoji">⏰</div>
+        <h3>Timing critique</h3>
+        <p>Le processus commence dès la première année universitaire</p>
+      </div>
+      <div class="lp-problem-card">
+        <div class="emoji">🎯</div>
+        <h3>Préparation exigeante</h3>
+        <p>Tests, entretiens et networking nécessitent un accompagnement spécialisé</p>
+      </div>
+      <div class="lp-problem-card">
+        <div class="emoji">💼</div>
+        <h3>Réseau essentiel</h3>
+        <p>L'accès aux meilleures opportunités passe par les bonnes connexions</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="lp-stats">
+    <div class="lp-stat-card">
+      <div class="num">80-90%</div>
+      <div class="lab">Des stagiaires d'été reçoivent une offre d'emploi</div>
+    </div>
+    <div class="lp-stat-card">
+      <div class="num">65-100M</div>
+      <div class="lab">FCFA de salaire annuel dès 23-24 ans</div>
+    </div>
+  </div>
+
+  <div class="lp-section">
+    <div class="lp-section-head">
+      <div class="eyebrow2">Notre Solution</div>
+      <h2>Un accompagnement complet, de l'admission au premier emploi</h2>
+    </div>
+    <div class="lp-solution-grid">
+      <div class="lp-solution-card">
+        <div class="lp-solution-num">01</div>
+        <h3>Orientation & Admission</h3>
+        <ul>
+          <li>Accompagnement UCAS/Parcoursup</li>
+          <li>Rédaction du personal statement</li>
+          <li>Constitution des dossiers de bourses</li>
+          <li>Choix des universités cibles</li>
+        </ul>
+      </div>
+      <div class="lp-solution-card">
+        <div class="lp-solution-num">02</div>
+        <h3>Préparation Intensive</h3>
+        <ul>
+          <li>Formation été avant la rentrée</li>
+          <li>Tests psychométriques & logique</li>
+          <li>Anglais académique & business</li>
+          <li>Simulations d'entretiens (HireVue)</li>
+        </ul>
+      </div>
+      <div class="lp-solution-card">
+        <div class="lp-solution-num">03</div>
+        <h3>Suivi Complet</h3>
+        <ul>
+          <li>Assistance candidatures & entretiens</li>
+          <li>Objectif : au moins 1 Spring Week</li>
+          <li>Suivi jusqu'au Summer Internship</li>
+          <li>Transformation en Graduate Job</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="lp-section">
+    <div class="lp-section-head">
+      <div class="eyebrow2">Notre Expérience</div>
+      <h2>Nous avons vécu ce parcours nous-mêmes</h2>
+    </div>
+    <p style="text-align:center; max-width:640px; margin:-14px auto 34px; color:var(--muted); font-size:15px; line-height:1.7;">Étudiants ivoiriens partis en Angleterre, nous avons navigué ce processus avec succès et décroché des stages dans les plus grandes institutions.</p>
+
+    <div class="lp-team-grid">
+      <div class="lp-team-card">
+        <div class="lp-team-avatar">DF</div>
+        <div class="name">Djamila Fadiga</div>
+        <div class="school">3ème année BSc Accounting & Finance<br>Warwick Business School<small>2ème au UK par The Guardian 2026</small></div>
+        <ul class="lp-team-list">
+          <li>Société Générale — Financement Structuré</li>
+          <li>HarbourVest Partners — Private Equity</li>
+          <li>HP Tech Ventures — Venture Capital</li>
+          <li>PineBridge Investments — Private Equity (offre de stage)</li>
+          <li>Conseil — Warwick MFC Equity Society</li>
+          <li>Conseiller principal — Warwick VC Society</li>
+        </ul>
+      </div>
+      <div class="lp-team-card">
+        <div class="lp-team-avatar">KM</div>
+        <div class="name">Kelany Monckeh</div>
+        <div class="school">3ème année License Économie & Management<br>Paris-Dauphine Londres - UCL<small>Top 1 par Le Figaro</small></div>
+        <ul class="lp-team-list">
+          <li>EY — Consulting</li>
+          <li>Bloomberg — Analytics & Sales (offre de stage)</li>
+          <li>OC&C — Strategy Consulting (offre de stage)</li>
+          <li>Président — Dau'frican (Dauphine African Society)</li>
+          <li>Représentant étudiant élu — Conseil d'Administration</li>
+          <li>Candidat — SEO London (programme sélectif)</li>
+        </ul>
+      </div>
+    </div>
+
+    <p class="lp-closer">Notre avantage ? <span class="hl">Nous comprenons intimement les obstacles que vous rencontrerez</span> et savons exactement comment les transformer en opportunités. Nous ouvrons les portes d'un réseau précieux d'anciens et de professionnels en poste dans les plus grandes banques et cabinets de conseil de Londres.</p>
+  </div>
+
+  <div class="lp-cta-band">
+    <h2>Prêt à sécuriser votre avenir ?</h2>
+    <a href="signup.html#signup" class="lp-cta-btn">Commencer Mon Parcours 🎯</a>
+  </div>
+</div>
+
+</body>
+</html>
+!DOCTYPE html>
+<html lang="fr">
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Career Launch</title>
