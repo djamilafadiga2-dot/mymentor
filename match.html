@@ -176,7 +176,21 @@
       });
 
       scored.sort((a, b) => b.total - a.total);
-      const top = scored.slice(0, 5);
+      let top = scored.slice(0, 5);
+
+      // Mention Bien (AAA-AAB) students can realistically reach a Tier 1
+      // university, but Tier 1's higher grade requirement usually pushes it
+      // below the cut-off. Guarantee at least one Tier 1 option is shown,
+      // picking whichever Tier 1 school best matches the chosen subject.
+      if (track !== 'parcoursup' && userLevel === 3) {
+        const hasTier1 = top.some(r => r.base.tier === 'tier1');
+        if (!hasTier1) {
+          const bestTier1 = scored.find(r => r.base.tier === 'tier1');
+          if (bestTier1) {
+            top = top.slice(0, 4).concat(bestTier1);
+          }
+        }
+      }
 
       const grid = document.getElementById('mf-result-grid');
       const resultsBlock = document.getElementById('mf-results');
