@@ -24,6 +24,15 @@
   }
   .mf-track-btn.on { border-color: var(--brand-600); background: var(--brand-100); color: var(--brand-700); }
   .mf-submit-row { margin-top: 22px; }
+  .mf-prefs-title { font-size: 13px; font-weight: 700; color: var(--ink-700); margin: 24px 0 12px; }
+  .mf-prefs-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; }
+  .mf-checkbox-row { display: flex; align-items: center; gap: 8px; margin-top: 14px; }
+  .mf-checkbox-row input { width: 16px; height: 16px; accent-color: var(--brand-600); }
+  .mf-checkbox-row label { font-size: 13.5px; color: var(--ink); cursor: pointer; }
+  @media (max-width: 800px) {
+    .mf-form-grid { grid-template-columns: 1fr; }
+    .mf-prefs-grid { grid-template-columns: 1fr 1fr; }
+  }
 
   .mf-results { margin-top: 32px; }
   .mf-results-head { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 16px; }
@@ -89,6 +98,55 @@
         </div>
       </div>
 
+      <div class="mf-prefs-title">Preferences (optional)</div>
+      <div class="mf-prefs-grid">
+        <div class="mf-field">
+          <label for="mf-region">Location</label>
+          <select id="mf-region">
+            <option value="any" selected>Any location</option>
+            <option value="london">London</option>
+            <option value="midlands">Midlands</option>
+            <option value="scotland">Scotland</option>
+            <option value="north">North of England</option>
+            <option value="south">South of England</option>
+          </select>
+        </div>
+
+        <div class="mf-field">
+          <label for="mf-budget">Budget / cost of living</label>
+          <select id="mf-budget">
+            <option value="any" selected>Any budget</option>
+            <option value="low">Lower cost cities</option>
+            <option value="medium">Mid-range cities</option>
+            <option value="high">No preference on cost</option>
+          </select>
+        </div>
+
+        <div class="mf-field">
+          <label for="mf-campus">Campus type</label>
+          <select id="mf-campus">
+            <option value="any" selected>Either</option>
+            <option value="city">City-based university</option>
+            <option value="campus">Self-contained campus</option>
+          </select>
+        </div>
+
+        <div class="mf-field">
+          <label for="mf-size">University size</label>
+          <select id="mf-size">
+            <option value="any" selected>Any size</option>
+            <option value="small">Small</option>
+            <option value="medium">Medium</option>
+            <option value="large">Large</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="mf-checkbox-row">
+        <input type="checkbox" id="mf-scholarships" />
+        <label for="mf-scholarships">Prioritise universities known for international student scholarships</label>
+      </div>
+
       <div class="mf-submit-row">
         <button class="btn btn-brand" id="mf-submit">Find My Top Matches →</button>
       </div>
@@ -151,10 +209,52 @@
       return { score: Math.min(3 + hits * 0.4, 4.5), matched: true };
     }
 
+    function preferenceFit(base, prefs) {
+      const notes = [];
+      let bonus = 0;
+
+      if (prefs.region !== 'any' && base.region === prefs.region) {
+        bonus += 2;
+        notes.push(`in ${(REGION_META[base.region] || {}).label || base.region}`);
+      }
+
+      if (prefs.campus !== 'any' && base.campus === prefs.campus) {
+        bonus += 1.5;
+        notes.push(base.campus === 'city' ? 'city-based' : 'self-contained campus');
+      }
+
+      if (prefs.size !== 'any' && base.size === prefs.size) {
+        bonus += 1.2;
+        notes.push(`${base.size} university`);
+      }
+
+      if (prefs.budget === 'low') {
+        if (base.costLevel === 'low') bonus += 1.5;
+        else if (base.costLevel === 'medium') bonus += 0.5;
+      } else if (prefs.budget === 'medium') {
+        if (base.costLevel === 'low' || base.costLevel === 'medium') bonus += 1;
+      }
+
+      if (prefs.scholarships && base.scholarships) {
+        bonus += 1;
+        notes.push('offers international scholarships');
+      }
+
+      return { bonus, notes };
+    }
+
     function runMatch() {
       const subjectValue = document.getElementById('mf-subject').value;
       const subjectLabel = document.getElementById('mf-subject').selectedOptions[0].textContent;
       const userLevel = parseInt(document.getElementById('mf-grades').value, 10);
+
+      const prefs = {
+        region: document.getElementById('mf-region').value,
+        budget: document.getElementById('mf-budget').value,
+        campus: document.getElementById('mf-campus').value,
+        size: document.getElementById('mf-size').value,
+        scholarships: document.getElementById('mf-scholarships').checked
+      };
 
       const flat = allUniversitiesFlat().filter(u => {
         if (track === 'parcoursup') return u.tier === 'parcoursup';
@@ -167,11 +267,13 @@
         const gFit = track === 'parcoursup'
           ? { score: 2.5, label: 'Parcoursup option' }
           : gradeFit(userLevel, base.tier);
+        const pFit = preferenceFit(base, prefs);
         return {
           base, detail,
-          total: sFit.score + gFit.score,
+          total: sFit.score + gFit.score + pFit.bonus,
           subjectMatched: sFit.matched,
-          fitLabel: gFit.label
+          fitLabel: gFit.label,
+          prefNotes: pFit.notes
         };
       });
 
@@ -199,11 +301,13 @@
       if (!top.length) {
         grid.innerHTML = '<div class="mf-empty">No matches found — try a different subject or track.</div>';
       } else {
-        sub.textContent = `Based on ${subjectLabel}${track === 'uk' ? ' · your predicted grades' : ' · Parcoursup track'}`;
+        const prefsActive = prefs.region !== 'any' || prefs.budget !== 'any' || prefs.campus !== 'any' || prefs.size !== 'any' || prefs.scholarships;
+        sub.textContent = `Based on ${subjectLabel}${track === 'uk' ? ' · your predicted grades' : ' · Parcoursup track'}${prefsActive ? ' · your preferences' : ''}`;
         grid.innerHTML = top.map((r, i) => {
-          const reason = r.subjectMatched
+          const base = r.subjectMatched
             ? `Offers programmes matching ${subjectLabel.toLowerCase()} · ${r.fitLabel.toLowerCase()}`
             : `${r.fitLabel} for your grade profile · broad business offering`;
+          const reason = r.prefNotes.length ? `${base} · ${r.prefNotes.join(' · ')}` : base;
           return `
             <div class="mf-card ${r.base.isOxbridge ? 'oxbridge' : ''}">
               <span class="mf-rank">${i + 1}</span>
