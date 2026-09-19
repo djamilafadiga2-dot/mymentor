@@ -38,6 +38,48 @@
   .pg-highlight { background: var(--brand-100); border: 1.5px solid var(--brand-500); }
 
   .pg-back { margin-top: 32px; margin-bottom: 40px; }
+
+  .ps-tabs { display: flex; gap: 8px; margin-top: 20px; border-bottom: 2px solid var(--ink-100); }
+  .ps-tab-btn {
+    padding: 12px 4px; margin-right: 22px; font-size: 14.5px; font-weight: 700; color: var(--muted);
+    background: none; border: none; border-bottom: 2px solid transparent; margin-bottom: -2px; cursor: pointer;
+  }
+  .ps-tab-btn.active { color: var(--brand-700); border-bottom-color: var(--brand-600); }
+  .ps-tabpanel[hidden] { display: none; }
+
+  .ps-intro { color: var(--ink); line-height: 1.7; font-size: 14.5px; margin: 22px 0 6px; }
+  .ps-q-card { background: var(--paper); border: 1px solid var(--line); border-radius: var(--radius-lg); padding: 22px 24px; margin-top: 20px; }
+  .ps-q-num { font-size: 11.5px; font-weight: 700; color: var(--brand-700); text-transform: uppercase; letter-spacing: .04em; margin-bottom: 6px; }
+  .ps-q-label { font-size: 16px; font-weight: 700; color: var(--ink-950); margin-bottom: 4px; }
+  .ps-q-hint { font-size: 12.5px; color: var(--muted); margin-bottom: 12px; }
+  .ps-q-card textarea {
+    width: 100%; min-height: 160px; resize: vertical; padding: 14px 16px; border-radius: var(--radius-md);
+    border: 1.5px solid var(--line-strong); font-size: 14.5px; font-family: inherit; color: var(--ink); background: var(--canvas);
+    line-height: 1.6;
+  }
+  .ps-q-card textarea:focus { outline: none; border-color: var(--brand-500); }
+  .ps-q-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 8px; font-size: 12.5px; }
+  .ps-q-count { color: var(--muted); }
+  .ps-q-status { font-weight: 600; }
+  .ps-q-status.ok { color: var(--ok); }
+  .ps-q-status.low { color: var(--warn); }
+  .ps-q-status.over { color: var(--danger, #c0392b); }
+
+  .ps-summary { background: var(--canvas); border: 1px solid var(--line); border-radius: var(--radius-lg); padding: 20px 24px; margin-top: 24px; }
+  .ps-summary-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 10px; }
+  .ps-summary-head h3 { font-size: 14px; }
+  .ps-summary-total { font-size: 13.5px; font-weight: 700; }
+  .ps-bar-track { height: 8px; border-radius: 4px; background: var(--ink-100); overflow: hidden; }
+  .ps-bar-fill { height: 100%; background: var(--brand-600); transition: width .2s ease; }
+  .ps-bar-fill.over { background: var(--danger, #c0392b); }
+  .ps-summary-note { font-size: 12px; color: var(--muted); margin-top: 8px; }
+
+  .ps-actions { display: flex; gap: 12px; margin-top: 22px; align-items: center; flex-wrap: wrap; }
+  .ps-saved-note { font-size: 12.5px; color: var(--muted); }
+  .ps-submitted-badge {
+    display: inline-flex; align-items: center; gap: 6px; background: var(--ok-bg); color: var(--ok);
+    border-radius: var(--radius-md); padding: 8px 14px; font-size: 13px; font-weight: 600; margin-top: 16px;
+  }
 </style>
 </head>
 <body>
@@ -49,6 +91,13 @@
     <div class="page-eyebrow">Guides</div>
     <h1 class="page-title">The Personal Statement Guide</h1>
     <p class="page-sub">By MyMentor — how admissions tutors actually read a personal statement, and how to write one that sounds like a developing thinker, not a CV.</p>
+
+    <div class="ps-tabs">
+      <button type="button" class="ps-tab-btn active" id="ps-tab-btn-guide" data-tab="guide">Guide</button>
+      <button type="button" class="ps-tab-btn" id="ps-tab-btn-write" data-tab="write">Write &amp; Submit</button>
+    </div>
+
+    <div class="ps-tabpanel" id="tab-guide">
 
     <div class="pg-toc mt-24">
       <h2>On this page</h2>
@@ -373,13 +422,180 @@
     </div>
 
     <div class="pg-back"><a href="services.html" style="color:var(--ink-800); font-weight:600; text-decoration:underline; font-size:13.5px;">← Back to Services</a></div>
+    </div>
+
+    <div class="ps-tabpanel" id="tab-write" hidden>
+      <p class="ps-intro">Since 2026 entry, UCAS replaced the single free-text personal statement with three set questions. Answer all three below — you have <strong>4,000 characters in total</strong> to split across them however you like, with a <strong>minimum of 350 characters per question</strong>. There's no fixed per-question maximum; a stronger answer to one question can borrow space from another.</p>
+
+      <div id="ps-questions"></div>
+
+      <div class="ps-summary">
+        <div class="ps-summary-head">
+          <h3>Total characters used</h3>
+          <span class="ps-summary-total" id="ps-total-label">0 / 4000</span>
+        </div>
+        <div class="ps-bar-track"><div class="ps-bar-fill" id="ps-bar-fill" style="width:0%"></div></div>
+        <p class="ps-summary-note" id="ps-summary-note"></p>
+      </div>
+
+      <div class="ps-actions">
+        <button class="btn btn-ghost" id="ps-save-btn" type="button">Save Draft</button>
+        <button class="btn btn-brand" id="ps-submit-btn" type="button">Submit for Review →</button>
+        <span class="ps-saved-note" id="ps-saved-note"></span>
+      </div>
+      <div id="ps-submitted-badge"></div>
+    </div>
   </main>
 </div>
 
 <script src="assets/js/app.js"></script>
 <script>
   const user = MMApp.requireUser();
-  if (user) { MMApp.renderSidebar('personal-statement'); }
+
+  if (user) {
+    MMApp.renderSidebar('personal-statement');
+
+    /* ---------- Tabs ---------- */
+    const tabBtns = document.querySelectorAll('.ps-tab-btn');
+    const tabPanels = { guide: document.getElementById('tab-guide'), write: document.getElementById('tab-write') };
+    tabBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        tabBtns.forEach(b => b.classList.toggle('active', b === btn));
+        Object.entries(tabPanels).forEach(([key, panel]) => { panel.hidden = key !== btn.dataset.tab; });
+      });
+    });
+    if (window.location.hash === '#write') {
+      document.getElementById('ps-tab-btn-write').click();
+    }
+
+    /* ---------- Write & Submit ---------- */
+    const PS_QUESTIONS = [
+      { id: 'q1', label: 'Why do you want to study this course or subject?' },
+      { id: 'q2', label: 'How have your qualifications and studies helped you to prepare for this course or subject?' },
+      { id: 'q3', label: 'What else have you done to prepare outside of education, and why are these experiences useful?' }
+    ];
+    const PS_MIN_PER_QUESTION = 350;
+    const PS_TOTAL_LIMIT = 4000;
+
+    const questionsMount = document.getElementById('ps-questions');
+    questionsMount.innerHTML = PS_QUESTIONS.map((q, i) => `
+      <div class="ps-q-card">
+        <div class="ps-q-num">Question ${i + 1} of 3</div>
+        <div class="ps-q-label">${q.label}</div>
+        <div class="ps-q-hint">Minimum ${PS_MIN_PER_QUESTION} characters. Shares the 4,000-character total with the other two questions.</div>
+        <textarea id="ps-input-${q.id}" placeholder="Start writing here..."></textarea>
+        <div class="ps-q-footer">
+          <span class="ps-q-count" id="ps-count-${q.id}">0 characters · 0 words</span>
+          <span class="ps-q-status" id="ps-status-${q.id}"></span>
+        </div>
+      </div>
+    `).join('');
+
+    const progress = MMApp.getProgress(user);
+    const draft = progress.personalStatementDraft || {};
+    PS_QUESTIONS.forEach(q => {
+      const el = document.getElementById(`ps-input-${q.id}`);
+      if (draft[q.id]) el.value = draft[q.id];
+      el.addEventListener('input', updatePS);
+    });
+
+    function countWords(text) {
+      const trimmed = text.trim();
+      return trimmed ? trimmed.split(/\s+/).length : 0;
+    }
+
+    function updatePS() {
+      let total = 0;
+      PS_QUESTIONS.forEach(q => {
+        const text = document.getElementById(`ps-input-${q.id}`).value;
+        const chars = text.length;
+        total += chars;
+        document.getElementById(`ps-count-${q.id}`).textContent = `${chars} characters · ${countWords(text)} words`;
+        const statusEl = document.getElementById(`ps-status-${q.id}`);
+        if (chars === 0) {
+          statusEl.textContent = '';
+          statusEl.className = 'ps-q-status';
+        } else if (chars < PS_MIN_PER_QUESTION) {
+          statusEl.textContent = `${PS_MIN_PER_QUESTION - chars} more to reach the minimum`;
+          statusEl.className = 'ps-q-status low';
+        } else {
+          statusEl.textContent = '✓ Meets minimum';
+          statusEl.className = 'ps-q-status ok';
+        }
+      });
+
+      const pct = Math.min((total / PS_TOTAL_LIMIT) * 100, 100);
+      const fill = document.getElementById('ps-bar-fill');
+      fill.style.width = `${pct}%`;
+      fill.classList.toggle('over', total > PS_TOTAL_LIMIT);
+      document.getElementById('ps-total-label').textContent = `${total} / ${PS_TOTAL_LIMIT}`;
+
+      const note = document.getElementById('ps-summary-note');
+      if (total > PS_TOTAL_LIMIT) {
+        note.textContent = `${total - PS_TOTAL_LIMIT} characters over the UCAS limit — trim before submitting.`;
+        note.style.color = 'var(--danger, #c0392b)';
+      } else {
+        note.textContent = `${PS_TOTAL_LIMIT - total} characters remaining across all three answers.`;
+        note.style.color = 'var(--muted)';
+      }
+    }
+    updatePS();
+
+    function collectAnswers() {
+      const answers = {};
+      PS_QUESTIONS.forEach(q => { answers[q.id] = document.getElementById(`ps-input-${q.id}`).value; });
+      return answers;
+    }
+
+    function saveDraft(silent) {
+      const answers = collectAnswers();
+      MMApp.setProgress(user, { personalStatementDraft: answers, personalStatementSavedAt: new Date().toISOString() });
+      if (!silent) {
+        document.getElementById('ps-saved-note').textContent = `Draft saved at ${new Date().toLocaleTimeString()}`;
+      }
+    }
+
+    document.getElementById('ps-save-btn').addEventListener('click', () => saveDraft(false));
+
+    function buildEmailBody(answers) {
+      return PS_QUESTIONS.map((q, i) =>
+        `Q${i + 1}: ${q.label}\n\n${answers[q.id].trim() || '(no answer written)'}\n(${answers[q.id].length} characters · ${countWords(answers[q.id])} words)\n`
+      ).join('\n----------------------------------------\n\n');
+    }
+
+    document.getElementById('ps-submit-btn').addEventListener('click', () => {
+      const answers = collectAnswers();
+      if (PS_QUESTIONS.some(q => !answers[q.id].trim())) {
+        alert('Please write an answer for all three questions before submitting.');
+        return;
+      }
+
+      saveDraft(true);
+      const submittedAt = new Date().toISOString();
+      MMApp.setProgress(user, { personalStatementSubmittedAt: submittedAt });
+
+      const studentName = user.fullName || user.email || 'Student';
+      const body = buildEmailBody(answers);
+      const fullBody = `Personal statement answers from ${studentName} (${user.email || ''})\n\n${body}`;
+      const subject = `Personal Statement Review – ${studentName}`;
+
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(fullBody).catch(() => {});
+      }
+
+      const mailto = `mailto:djamilafadiga2@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(fullBody)}`;
+      window.location.href = mailto;
+
+      const badge = document.getElementById('ps-submitted-badge');
+      badge.innerHTML = `<div class="ps-submitted-badge">✓ Email draft opened for ${studentName} on ${new Date(submittedAt).toLocaleString()}. Your full answers were also copied to your clipboard — if the email looks cut off, paste to replace the body before sending.</div>`;
+    });
+
+    /* Restore submitted badge if this draft was already sent before */
+    if (progress.personalStatementSubmittedAt) {
+      document.getElementById('ps-submitted-badge').innerHTML =
+        `<div class="ps-submitted-badge">✓ Last submitted on ${new Date(progress.personalStatementSubmittedAt).toLocaleString()}</div>`;
+    }
+  }
 </script>
 </body>
 </html>
