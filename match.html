@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Find My Fit · MyMentor</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/theme.css" />
+<style>
+  .mf-form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+  .mf-field { display: flex; flex-direction: column; gap: 6px; }
+  .mf-field label { font-size: 12.5px; font-weight: 700; color: var(--ink-700); text-transform: uppercase; letter-spacing: .03em; }
+  .mf-field select {
+    padding: 12px 14px; border-radius: var(--radius-md); border: 1.5px solid var(--line-strong);
+    font-size: 14.5px; background: var(--paper); color: var(--ink); font-family: inherit;
+  }
+  .mf-field select:focus { outline: none; border-color: var(--brand-500); }
+  .mf-track { display: flex; gap: 10px; }
+  .mf-track-btn {
+    flex: 1; padding: 12px 14px; border-radius: var(--radius-md); border: 1.5px solid var(--line-strong);
+    background: var(--paper); font-size: 14px; font-weight: 600; color: var(--ink); cursor: pointer; text-align: center;
+  }
+  .mf-track-btn.on { border-color: var(--brand-600); background: var(--brand-100); color: var(--brand-700); }
+  .mf-submit-row { margin-top: 22px; }
+
+  .mf-results { margin-top: 32px; }
+  .mf-results-head { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 16px; }
+  .mf-results-head h2 { font-size: 19px; }
+  .mf-result-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 14px; }
+  .mf-card { background: var(--paper); border: 1px solid var(--line); border-radius: var(--radius-md); padding: 18px; position: relative; }
+  .mf-card.oxbridge { background: var(--brand-100); border-color: var(--brand-500); }
+  .mf-rank {
+    position: absolute; top: 14px; right: 14px; width: 26px; height: 26px; border-radius: 50%;
+    background: var(--ink-950); color: #fff; font-size: 12px; font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .mf-card h3 { font-size: 15.5px; margin-bottom: 6px; padding-right: 30px; }
+  .mf-card .mf-tier { font-size: 11.5px; font-weight: 700; color: var(--brand-700); text-transform: uppercase; letter-spacing: .03em; margin-bottom: 8px; }
+  .mf-card .mf-reason { font-size: 12.5px; color: var(--muted); line-height: 1.55; margin-bottom: 14px; min-height: 34px; }
+  .mf-empty { text-align: center; padding: 40px 20px; color: var(--muted); }
+</style>
+</head>
+<body>
+
+<div class="app-shell">
+  <nav class="sidebar" id="mm-sidebar"></nav>
+
+  <main class="main">
+    <div class="page-eyebrow">Personalised</div>
+    <h1 class="page-title">Find My Fit</h1>
+    <p class="page-sub">Tell us your subject and your grades, and we'll surface the 5 universities from our list that best match your profile — from safe bets to ambitious reaches.</p>
+
+    <div class="card card-pad mt-24">
+      <div class="mf-field mt-8">
+        <label>Application track</label>
+        <div class="mf-track">
+          <button type="button" class="mf-track-btn on" id="mf-track-uk" data-track="uk">🇬🇧 UK (UCAS)</button>
+          <button type="button" class="mf-track-btn" id="mf-track-fr" data-track="parcoursup">🇫🇷 Parcoursup</button>
+        </div>
+      </div>
+
+      <div class="mf-form-grid mt-24">
+        <div class="mf-field">
+          <label for="mf-subject">Subject you want to study</label>
+          <select id="mf-subject">
+            <option value="accounting finance">Accounting &amp; Finance</option>
+            <option value="business management">Business / Management</option>
+            <option value="economics">Economics</option>
+            <option value="banking finance">Banking &amp; Finance</option>
+            <option value="marketing">Marketing</option>
+            <option value="international business">International Business</option>
+            <option value="data analytics">Data Analytics / Data Science</option>
+            <option value="law">Law</option>
+            <option value="engineering">Engineering</option>
+            <option value="computer science computing software">Computer Science / Computing</option>
+          </select>
+        </div>
+
+        <div class="mf-field" id="mf-grades-field">
+          <label for="mf-grades">Predicted / achieved grades</label>
+          <select id="mf-grades">
+            <option value="4">A*A*A or above (or IB 40+)</option>
+            <option value="3" selected>AAA – AAB (or IB 36–39)</option>
+            <option value="2">ABB – BBB (or IB 32–35)</option>
+            <option value="1">BBC or below (or IB below 32)</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="mf-submit-row">
+        <button class="btn btn-brand" id="mf-submit">Find My Top Matches →</button>
+      </div>
+    </div>
+
+    <div class="mf-results" id="mf-results" style="display:none;">
+      <div class="mf-results-head">
+        <h2>Your top matches</h2>
+        <span class="small muted" id="mf-results-sub"></span>
+      </div>
+      <div class="mf-result-grid" id="mf-result-grid"></div>
+    </div>
+  </main>
+</div>
+
+<script src="assets/js/app.js"></script>
+<script src="assets/js/data/universities.js"></script>
+<script src="assets/js/data/flyer-data.js"></script>
+<script>
+  const user = MMApp.requireUser();
+
+  if (user) {
+    MMApp.renderSidebar('match');
+
+    let track = 'uk';
+    const trackBtns = document.querySelectorAll('.mf-track-btn');
+    trackBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        track = btn.dataset.track;
+        trackBtns.forEach(b => b.classList.toggle('on', b === btn));
+        document.getElementById('mf-grades-field').style.opacity = track === 'parcoursup' ? '0.45' : '1';
+        document.getElementById('mf-grades').disabled = track === 'parcoursup';
+      });
+    });
+
+    const TIER_LEVEL = { tier1: 4, tier2: 3, tier3: 2 };
+
+    function gradeFit(userLevel, tierKey) {
+      const req = TIER_LEVEL[tierKey];
+      if (req === undefined) return { score: 2, label: 'Good option' };
+      const diff = userLevel - req;
+      if (diff >= 1) return { score: 3.2, label: 'Safe choice' };
+      if (diff === 0) return { score: 3.6, label: 'Strong match' };
+      if (diff === -1) return { score: 1.6, label: 'Ambitious reach' };
+      return { score: 0.4, label: 'Big reach' };
+    }
+
+    function subjectFit(subjectKeywords, base, detail) {
+      const keywords = subjectKeywords.split(' ');
+      const haystack = [
+        base.name, base.description,
+        detail ? (detail.programmes || []).join(' ') : '',
+        detail ? detail.about || '' : '',
+        detail ? detail.programmesTitle || '' : ''
+      ].join(' ').toLowerCase();
+
+      let hits = 0;
+      keywords.forEach(k => { if (haystack.includes(k)) hits++; });
+      if (hits === 0) return { score: 0, matched: false };
+      return { score: Math.min(3 + hits * 0.4, 4.5), matched: true };
+    }
+
+    function runMatch() {
+      const subjectValue = document.getElementById('mf-subject').value;
+      const subjectLabel = document.getElementById('mf-subject').selectedOptions[0].textContent;
+      const userLevel = parseInt(document.getElementById('mf-grades').value, 10);
+
+      const flat = allUniversitiesFlat().filter(u => {
+        if (track === 'parcoursup') return u.tier === 'parcoursup';
+        return u.tier !== 'parcoursup';
+      });
+
+      const scored = flat.map(base => {
+        const detail = (typeof FLYER_DATA !== 'undefined') ? FLYER_DATA[base.id] : null;
+        const sFit = subjectFit(subjectValue, base, detail);
+        const gFit = track === 'parcoursup'
+          ? { score: 2.5, label: 'Parcoursup option' }
+          : gradeFit(userLevel, base.tier);
+        return {
+          base, detail,
+          total: sFit.score + gFit.score,
+          subjectMatched: sFit.matched,
+          fitLabel: gFit.label
+        };
+      });
+
+      scored.sort((a, b) => b.total - a.total);
+      const top = scored.slice(0, 5);
+
+      const grid = document.getElementById('mf-result-grid');
+      const resultsBlock = document.getElementById('mf-results');
+      const sub = document.getElementById('mf-results-sub');
+
+      if (!top.length) {
+        grid.innerHTML = '<div class="mf-empty">No matches found — try a different subject or track.</div>';
+      } else {
+        sub.textContent = `Based on ${subjectLabel}${track === 'uk' ? ' · your predicted grades' : ' · Parcoursup track'}`;
+        grid.innerHTML = top.map((r, i) => {
+          const reason = r.subjectMatched
+            ? `Offers programmes matching ${subjectLabel.toLowerCase()} · ${r.fitLabel.toLowerCase()}`
+            : `${r.fitLabel} for your grade profile · broad business offering`;
+          return `
+            <div class="mf-card ${r.base.isOxbridge ? 'oxbridge' : ''}">
+              <span class="mf-rank">${i + 1}</span>
+              <div class="mf-tier">${(TIER_META[r.base.tier] || {}).label || ''}</div>
+              <h3>${r.base.name}</h3>
+              <p class="mf-reason">${reason}</p>
+              <a class="btn btn-primary btn-sm" href="flyer.html?id=${r.base.id}">View profile →</a>
+            </div>
+          `;
+        }).join('');
+      }
+
+      resultsBlock.style.display = 'block';
+      resultsBlock.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    document.getElementById('mf-submit').addEventListener('click', runMatch);
+  }
+</script>
+</body>
+</html>
