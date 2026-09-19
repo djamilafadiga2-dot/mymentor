@@ -8,7 +8,7 @@ const UNIVERSITIES = {
     { id: 'lse', name: 'London School of Economics', description: '#1 UK for Accounting & Finance | Elite Global Target | Unrivalled IB & Consulting Recruitment', flyerFile: 'lse_flyer.html' },
     { id: 'imperial', name: 'Imperial College London', description: 'Top 5 UK | STEM Excellence | Analytics, Finance & Fintech', flyerFile: 'imperial_flyer.html' },
     { id: 'ucl', name: 'University College London', description: 'Top 10 UK University | Rapidly Rising in Management | Innovation & Quantitative Analysis Focus', flyerFile: 'ucl_flyer.html' },
-    { id: 'kings', name: "King's College London", description: 'Top 15 UK University | Russell Group | Central London Location | Growing Business School Reputation', flyerFile: 'kcl_flyer.html' },
+    { id: 'kcl', name: "King's College London", description: 'Top 15 UK University | Russell Group | Central London Location | Growing Business School Reputation', flyerFile: 'kcl_flyer.html' },
     { id: 'warwick', name: 'University of Warwick', description: '#1 for Graduate Employer Reputation | Outstanding Placements | Top Recruiter Target', flyerFile: 'warwick_flyer.html' },
     { id: 'bath', name: 'University of Bath', description: '#1 UK Placement Record | 67% Placement Participation | Exceptional Employability', flyerFile: 'bath_flyer.html' },
     { id: 'durham', name: 'Durham University', description: 'Top 10 UK | Oxbridge-Style Collegiate | Strong Accounting & Finance', flyerFile: 'durham_flyer.html' },
@@ -29,7 +29,7 @@ const UNIVERSITIES = {
     { id: 'aston', name: 'Aston University', description: '#1 Graduate Prospects | Industry-Integrated | Exceptional Placement Programme', flyerFile: 'aston_flyer.html' },
     { id: 'southampton', name: 'University of Southampton', description: 'Top 20 UK Russell Group | Analytics-Oriented Management | Strong in Data-Driven Business Fields', flyerFile: 'southampton_flyer.html' },
     { id: 'sheffield', name: 'University of Sheffield', description: 'Top 25 UK Russell Group | Strong Student Community | Excellent Student Experience | Affordable Northern City', flyerFile: 'sheffield_flyer.html' },
-    { id: 'queen-mary', name: 'Queen Mary University of London', description: 'Top 35 UK Russell Group | London Location | Diverse Student Body | Good Value London Option', flyerFile: 'queen_mary_flyer.html' },
+    { id: 'queen_mary', name: 'Queen Mary University of London', description: 'Top 35 UK Russell Group | London Location | Diverse Student Body | Good Value London Option', flyerFile: 'queen_mary_flyer.html' },
     { id: 'bayes', name: 'Bayes Business School', description: 'City of London | Finance Excellence | Triple Crown Accredited', flyerFile: 'bayes_flyer.html' },
     { id: 'strathclyde', name: 'Strathclyde Business School', description: "Scotland's Oldest | Top 10 Accounting & Finance | Glasgow", flyerFile: 'strathclyde_flyer.html' }
   ],
@@ -51,4 +51,3 @@ function allUniversitiesFlat() {
     list.map(u => ({ ...u, tier }))
   );
 }
-
