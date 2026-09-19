@@ -174,8 +174,8 @@
     <div class="auth-box">
       <div class="form-eyebrow">Step 1 of 2</div>
       <div class="form-title">Enter your invitation code</div>
-      <div class="msg error" id="errorMsg"></div>
-      <div class="msg success" id="successMsg"></div>
+      <div class="msg error"></div>
+      <div class="msg success"></div>
       <div class="form-group">
         <label>Code d'invitation</label>
         <input type="text" id="inviteCode" placeholder="Entrez votre code d'invitation">
@@ -194,6 +194,8 @@
     <div class="auth-box">
       <div class="form-eyebrow">Step 2 of 2</div>
       <div class="form-title">Créer votre compte</div>
+      <div class="msg error"></div>
+      <div class="msg success"></div>
       <div class="form-group">
         <label>Nom complet</label>
         <input type="text" id="fullName" placeholder="Entrez votre nom complet">
@@ -216,6 +218,8 @@
     <div class="auth-box">
       <div class="form-eyebrow">Welcome back</div>
       <div class="form-title">Se connecter</div>
+      <div class="msg error"></div>
+      <div class="msg success"></div>
       <div class="form-group">
         <label>Email</label>
         <input type="email" id="loginEmail" placeholder="Entrez votre email">
@@ -273,13 +277,17 @@
   };
 
   function showError(msg) {
-    const errorDiv = document.getElementById('errorMsg');
+    const stage = document.querySelector('.stage.active');
+    const errorDiv = stage && stage.querySelector('.msg.error');
+    if (!errorDiv) return;
     errorDiv.textContent = msg;
     errorDiv.style.display = 'block';
     setTimeout(() => errorDiv.style.display = 'none', 4000);
   }
   function showSuccess(msg) {
-    const successDiv = document.getElementById('successMsg');
+    const stage = document.querySelector('.stage.active');
+    const successDiv = stage && stage.querySelector('.msg.success');
+    if (!successDiv) return;
     successDiv.textContent = msg;
     successDiv.style.display = 'block';
     setTimeout(() => successDiv.style.display = 'none', 4000);
