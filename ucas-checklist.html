@@ -38,7 +38,7 @@
   <main class="main">
     <div class="page-eyebrow">Application readiness</div>
     <h1 class="page-title">UCAS Checklist</h1>
-    <p class="page-sub">Everything you need to have ready before — and during — your UCAS application. Check items off as you complete them; your progress is saved automatically.</p>
+    <p class="page-sub">Everything you need to have ready before, during and after your UCAS application — your full profile, documents, finances and next steps. Check items off as you complete them; your progress is saved automatically.</p>
 
     <div class="card card-pad mt-24">
       <div class="between">
@@ -61,17 +61,45 @@
   const CHECKLIST = [
     { group: 'Before you start', items: [
       { id: 'account', title: 'Create your UCAS Hub account', desc: 'Register at ucas.com — use an email you check daily; this is where all offers and decisions arrive.' },
-      { id: 'shortlist', title: 'Shortlist up to 5 universities', desc: 'UCAS allows a maximum of 5 choices. Balance 1–2 ambitious picks with realistic and safe options.', link: { href: 'universities.html', text: 'Browse universities' } }
+      { id: 'fee-status', title: 'Confirm your fee status', desc: 'Work out whether you\'ll be classed as Home or International/Overseas for each university — it affects fees, visa requirements and sometimes entry criteria.' },
+      { id: 'shortlist', title: 'Shortlist up to 5 universities', desc: 'UCAS allows a maximum of 5 choices. Balance 1–2 ambitious picks with realistic and safe options.', link: { href: 'universities.html', text: 'Browse universities' } },
+      { id: 'entry-requirements', title: 'Check entry requirements per course', desc: 'Grades, required subjects and any extra criteria can differ a lot between universities offering the "same" course — check each one individually.' }
+    ]},
+    { group: 'Your profile & contact details', items: [
+      { id: 'contact-details', title: 'Add your contact details & address', desc: 'Make sure your postal address, phone number and email on UCAS are accurate — this is how universities and UCAS reach you.' },
+      { id: 'education-history', title: 'List your full education history', desc: 'Every school or college you\'ve attended since age 11, with start and end dates, entered accurately on your UCAS form.' },
+      { id: 'employment-history', title: 'Add your employment history', desc: 'Part-time jobs, internships or work placements, with dates and a short description of what you did.' },
+      { id: 'parent-details', title: 'Add parent/guardian or sponsor details', desc: 'Needed if you\'re under 18, or if a parent, guardian or sponsor is paying your fees or supporting a finance application.' }
     ]},
     { group: 'Your documents', items: [
-      { id: 'ps', title: 'Draft your personal statement', desc: 'Course motivation + two university-specific answers, under the current 2026 format.', link: { href: 'personal-statement-guide.html', text: 'Open PS workspace' } },
+      { id: 'ps', title: 'Draft your personal statement', desc: 'Answer the three current UCAS questions within the shared 4,000-character limit — see the workspace for word counts and submitting for review.', link: { href: 'personal-statement-guide.html', text: 'Open PS workspace' } },
       { id: 'reference', title: 'Request your academic reference', desc: 'Ask a teacher or counsellor early — references can take several weeks, especially near deadlines.' },
-      { id: 'english-test', title: 'Book your English test', desc: 'IELTS, TOEFL or Cambridge — check each university's minimum score before booking.', link: { href: 'english-certifications-guide.html', text: 'English cert guide' } },
-      { id: 'transcript', title: 'Gather transcripts & predicted grades', desc: 'Your school will submit predicted grades directly, but keep your own copies of past results.' }
+      { id: 'english-test', title: 'Book your English test', desc: 'IELTS, TOEFL or Cambridge — check each university\'s minimum score before booking.', link: { href: 'english-certifications-guide.html', text: 'English cert guide' } },
+      { id: 'transcript', title: 'Gather transcripts & predicted grades', desc: 'Your school will submit predicted grades directly, but keep your own copies of past results.' },
+      { id: 'photo', title: 'Prepare a passport-style photo', desc: 'Some universities and most student visa applications will ask for a recent, passport-style photo — sort this early so it doesn\'t hold anything up.' }
+    ]},
+    { group: 'Extra-curriculars & supporting evidence', items: [
+      { id: 'activities', title: 'Record your work experience & extra-curriculars', desc: 'Note down anything relevant — volunteering, clubs, competitions, work experience — that supports your personal statement or shows relevant skills.' },
+      { id: 'admissions-test', title: 'Check if your course needs an admissions test', desc: 'Some courses require a separate test — e.g. LNAT (Law), UCAT or BMAT (Medicine/Dentistry), TSA or MAT (Oxbridge). Book well ahead if so.' },
+      { id: 'portfolio', title: 'Prepare a portfolio or audition material', desc: 'Required for some Art & Design, Music, Architecture and Drama courses — check each university\'s specific format and deadline.' }
+    ]},
+    { group: 'Finance', items: [
+      { id: 'scholarships', title: 'Check scholarship eligibility', desc: 'Some scholarships (e.g. Chevening) have separate, earlier deadlines — start looking now.', link: { href: 'scholarships.html', text: 'Explore scholarships' } },
+      { id: 'student-finance', title: 'Look into student finance or tuition fee loans', desc: 'Applications can take several weeks to process — start this as early as possible, even before you have final offers.' },
+      { id: 'accommodation-cost', title: 'Research accommodation costs & options', desc: 'Compare university halls vs private accommodation, and note their application deadlines — some fill up fast.' }
     ]},
     { group: 'Before you submit', items: [
       { id: 'deadline', title: 'Confirm your deadline', desc: '15 October for Oxford, Cambridge and most medicine/dentistry courses; 25 January for the majority of programmes (incl. business, finance, economics, management).', deadline: 'Check per-course deadlines' },
-      { id: 'scholarships', title: 'Check scholarship eligibility', desc: 'Some scholarships (e.g. Chevening) have separate, earlier deadlines — start looking now.', link: { href: 'scholarships.html', text: 'Explore scholarships' } }
+      { id: 'proofread', title: 'Proofread and finalise your personal statement', desc: 'Check spelling, grammar, the character count, and that it reads in your own voice before you submit it.' },
+      { id: 'review-form', title: 'Double-check every section of your UCAS form', desc: 'Personal details, education history, employment history, personal statement and reference — review the whole form before paying.' },
+      { id: 'pay-fee', title: 'Pay the UCAS application fee', desc: 'A small one-off fee is required to submit your choices — have a card ready.' }
+    ]},
+    { group: 'After you submit', items: [
+      { id: 'track-status', title: 'Track your application on UCAS Hub', desc: 'Universities update your status there as they make decisions — check it regularly rather than waiting for emails alone.' },
+      { id: 'respond-offers', title: 'Respond to your offers', desc: 'Once decisions are in, choose your firm (first choice) and insurance (backup) offer by the UCAS deadline.' },
+      { id: 'interview-prep', title: 'Prepare for interviews', desc: 'If a university invites you to interview, research typical questions for your subject and practise talking through your personal statement.' },
+      { id: 'visa', title: 'Apply for a student visa', desc: 'International students should apply once they have a confirmed place — check processing times so you\'re not rushing close to the start of term.' },
+      { id: 'results-day', title: 'Plan for results day', desc: 'Know exactly what grades your firm offer needs, and what your options are (including Clearing) if you don\'t quite meet them.' }
     ]}
   ];
 
