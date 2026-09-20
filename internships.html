@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Internship Hub · MyMentor</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/theme.css" />
+<style>
+  .ih-intro { background: var(--ink-950); color: #dfe6f7; border-radius: var(--radius-lg); padding: 28px 30px; }
+  .ih-intro h2 { color: #fff; font-size: 22px; margin-bottom: 10px; }
+  .ih-intro p { font-size: 14.5px; line-height: 1.7; max-width: 760px; }
+  .ih-intro p + p { margin-top: 10px; }
+  .ih-intro strong { color: var(--brand-500); }
+
+  .ih-steps { display: flex; flex-direction: column; gap: 14px; margin-top: 18px; }
+  .ih-step {
+    display: grid; grid-template-columns: 56px 1fr auto; gap: 20px; align-items: center;
+    background: var(--paper); border: 1px solid var(--line); border-radius: var(--radius-lg);
+    padding: 22px 24px; box-shadow: var(--shadow-sm);
+  }
+  .ih-step.soon { background: var(--canvas); box-shadow: none; }
+  .ih-num {
+    width: 48px; height: 48px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--font-display); font-size: 20px; font-weight: 600;
+    background: var(--brand-100); color: var(--brand-700);
+  }
+  .ih-step.live .ih-num { background: linear-gradient(135deg, var(--brand-600), var(--brand-500)); color: #fff; }
+  .ih-step h3 { font-size: 18px; }
+  .ih-step p { font-size: 13.5px; color: var(--muted); margin-top: 5px; line-height: 1.55; }
+  .ih-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+  .ih-tag { font-size: 11.5px; font-weight: 600; padding: 3px 9px; border-radius: 999px; background: var(--ink-050); border: 1px solid var(--line); color: var(--ink-700); }
+  .ih-side { display: flex; flex-direction: column; align-items: flex-end; gap: 10px; }
+
+  .ih-timeline { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-top: 16px; }
+  .ih-tl { background: var(--paper); border: 1px solid var(--line); border-radius: var(--radius-md); padding: 16px 18px; }
+  .ih-tl .when { font-size: 11.5px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: var(--brand-700); }
+  .ih-tl .what { font-size: 14px; font-weight: 600; color: var(--ink-950); margin-top: 6px; }
+  .ih-tl .how { font-size: 12.5px; color: var(--muted); margin-top: 4px; line-height: 1.5; }
+
+  @media (max-width: 980px) {
+    .ih-step { grid-template-columns: 1fr; gap: 12px; }
+    .ih-side { align-items: flex-start; }
+    .ih-timeline { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="app-shell">
+  <nav class="sidebar" id="mm-sidebar"></nav>
+
+  <main class="main">
+    <div class="page-eyebrow">Internships</div>
+    <h1 class="page-title">The Internship Hub</h1>
+    <p class="page-sub">Everything you need to secure a spring internship in finance, in the order you'll need it: from your first CV to the final interview.</p>
+
+    <div class="ih-intro mt-24">
+      <h2>What is a spring internship?</h2>
+      <p>A spring internship (or "spring week") is a 1–2 week programme run by banks and financial firms, usually in March or April. It is the first step into the industry: many firms use it to fast-track students to a summer internship, and summer internships lead to graduate job offers.</p>
+      <p>Most spring weeks are open to <strong>first-year university students</strong>, and applications open from around September to January. Firms often review applications as they arrive, so <strong>applying early matters</strong>. Before university, you can build your CV and apply to insight days and school-level programmes that some firms run.</p>
+    </div>
+
+    <div class="page-eyebrow" style="margin-top:36px;">Your timeline</div>
+    <div class="ih-timeline">
+      <div class="ih-tl"><div class="when">Now</div><div class="what">Build your profile</div><div class="how">Work experience, clubs, one personal project.</div></div>
+      <div class="ih-tl"><div class="when">Final year of school</div><div class="what">Polish your CV</div><div class="how">Insight days and online programmes; prepare your UK university move.</div></div>
+      <div class="ih-tl"><div class="when">Sept – Jan, 1st year</div><div class="what">Apply</div><div class="how">CV, cover letter, online tests, video interviews.</div></div>
+      <div class="ih-tl"><div class="when">Mar – Apr, 1st year</div><div class="what">Spring week</div><div class="how">Perform well and aim for a summer internship offer.</div></div>
+    </div>
+
+    <div class="page-eyebrow" style="margin-top:36px;">The steps</div>
+    <div class="ih-steps" id="ih-steps"></div>
+  </main>
+</div>
+
+<script src="assets/js/app.js"></script>
+<script>
+  const user = MMApp.requireUser();
+
+  const STEPS = [
+    {
+      num: 1, live: true,
+      title: 'CV & Cover Letter',
+      desc: 'Write a one-page UK finance CV and a tailored cover letter, even with limited experience.',
+      tags: ['Work experience', 'Clubs & societies', 'Personal projects', 'Sample CV', 'Cover letter structure'],
+      href: 'internship-cv.html',
+      progressKey: 'internshipCvChecklist', total: 11
+    },
+    {
+      num: 2, live: false,
+      title: 'Online Assessments',
+      desc: 'Numerical, verbal, logical and situational judgement tests: what to expect, and where to practise.',
+      tags: ['Job Test Prep', 'Graduates First', 'Practice platforms', 'Study plan']
+    },
+    {
+      num: 3, live: false,
+      title: 'Companies & Application Tracker',
+      desc: 'Track every application, and build a profile for each firm: values, culture, divisions and what to mention in your answers.',
+      tags: ['UK finance tracker', 'Application tracker', 'Company profiles']
+    },
+    {
+      num: 4, live: false,
+      title: 'Interview Preparation',
+      desc: 'The most common questions and how to answer them with the STAR framework.',
+      tags: ['Motivation questions', 'Behavioural questions', 'Technical essentials', 'Video interviews']
+    },
+    {
+      num: 5, live: false,
+      title: 'Networking & Commercial Awareness',
+      desc: 'LinkedIn, insight events, following the markets, and turning a spring week into a summer offer.',
+      tags: ['LinkedIn', 'Market news', 'During the spring week']
+    }
+  ];
+
+  if (user) {
+    MMApp.renderSidebar('internships');
+    const progress = MMApp.getProgress(user);
+
+    document.getElementById('ih-steps').innerHTML = STEPS.map(s => {
+      let pill = '<span class="pill pill-todo">Coming soon</span>';
+      let cta = '';
+      if (s.live) {
+        const done = Object.values(progress[s.progressKey] || {}).filter(Boolean).length;
+        pill = done >= s.total
+          ? '<span class="pill pill-done">Complete</span>'
+          : done > 0
+            ? `<span class="pill pill-warn">${done}/${s.total} done</span>`
+            : '<span class="pill pill-todo">Not started</span>';
+        cta = `<a class="btn btn-primary btn-sm" href="${s.href}">Open guide →</a>`;
+      }
+      return `
+        <div class="ih-step ${s.live ? 'live' : 'soon'}">
+          <div class="ih-num">${s.num}</div>
+          <div>
+            <h3>${s.title}</h3>
+            <p>${s.desc}</p>
+            <div class="ih-tags">${s.tags.map(t => `<span class="ih-tag">${t}</span>`).join('')}</div>
+          </div>
+          <div class="ih-side">${pill}${cta}</div>
+        </div>`;
+    }).join('');
+  }
+</script>
+</body>
+</html>

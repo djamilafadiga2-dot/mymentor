@@ -70,18 +70,25 @@ const MMApp = (() => {
                     { key: 'scholarships', href: 'scholarships.html', icon: '✦', label: 'Scholarships' }
                       ];
 
+                 const INTERNSHIP_NAV_ITEMS = [
+                    { key: 'internships', href: 'internships.html', icon: '💼', label: 'Internship Hub' },
+                    { key: 'internship-cv', href: 'internship-cv.html', icon: '📄', label: 'CV & Cover Letter' }
+                      ];
+
                  function renderSidebar(activeKey) {
                         const mount = document.getElementById('mm-sidebar');
                         if (!mount) return;
                         const user = getCurrentUser();
 
-       const links = NAV_ITEMS.map(item => `
+       const toLinks = (items) => items.map(item => `
              <a class="nav-link ${item.key === activeKey ? 'active' : ''}" href="${item.href}">
                      <span class="nav-icon">${item.icon}</span>
                              <span>${item.label}</span>
                                      <span class="dot" style="margin-left:auto"></span>
                                            </a>
                                                `).join('');
+       const links = toLinks(NAV_ITEMS);
+       const internshipLinks = toLinks(INTERNSHIP_NAV_ITEMS);
 
        mount.innerHTML = `
              <div class="brand">
@@ -90,6 +97,10 @@ const MMApp = (() => {
                                  <div class="nav-group">
                                          <div class="nav-label">Your Journey</div>
                                                  ${links}
+                                                       </div>
+                                 <div class="nav-group">
+                                         <div class="nav-label">Internships</div>
+                                                 ${internshipLinks}
                                                        </div>
                                                              <div class="sidebar-footer">
                                                                      <div class="user-chip">

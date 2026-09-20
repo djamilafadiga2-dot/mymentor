@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>CV & Cover Letter · MyMentor</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/theme.css" />
+<style>
+  .pg-toc { background: var(--canvas); border: 1px solid var(--line); border-radius: var(--radius-lg); padding: 22px 28px; }
+  .pg-toc h2 { font-size: 15px; letter-spacing: .04em; text-transform: uppercase; color: var(--brand-700); margin-bottom: 10px; }
+  .pg-toc ul { list-style: none; display: flex; flex-direction: column; }
+  .pg-toc li { border-bottom: 1px solid var(--line); }
+  .pg-toc li:last-child { border-bottom: none; }
+  .pg-toc a { display: block; padding: 8px 2px; font-size: 13.5px; font-weight: 500; color: var(--ink); }
+  .pg-toc a:hover { color: var(--brand-700); }
+
+  .pg-section { margin-top: 34px; }
+  .pg-section h2 { font-size: 22px; padding-bottom: 12px; margin-bottom: 18px; border-bottom: 2px solid var(--ink-100); }
+  .pg-section h3 { font-size: 17px; color: var(--brand-700); margin-top: 26px; margin-bottom: 12px; }
+  .pg-section h4 { font-size: 14.5px; font-weight: 700; color: var(--ink-950); margin-bottom: 6px; }
+  .pg-section p { color: var(--ink); margin-bottom: 13px; line-height: 1.7; font-size: 14.5px; }
+  .pg-section ul, .pg-section ol { margin: 0 0 16px 22px; }
+  .pg-section li { color: var(--ink); margin-bottom: 7px; line-height: 1.6; font-size: 14.5px; }
+  .pg-section strong { color: var(--ink-950); font-weight: 700; }
+  .pg-section em { color: var(--muted); }
+
+  .pg-box { border-radius: var(--radius-md); padding: 18px 20px; margin: 16px 0; }
+  .pg-box p:last-child, .pg-box ul:last-child { margin-bottom: 0; }
+  .pg-example { background: var(--canvas); border-left: 4px solid var(--brand-500); }
+  .pg-weak { background: var(--warn-bg); border-left: 4px solid var(--warn); }
+  .pg-strong { background: var(--ok-bg); border-left: 4px solid var(--ok); }
+  .pg-highlight { background: var(--brand-100); border: 1.5px solid var(--brand-500); }
+
+  .pg-table { width: 100%; border-collapse: collapse; font-size: 14px; margin: 8px 0 18px; background: var(--paper); border-radius: var(--radius-md); overflow: hidden; border: 1px solid var(--line); }
+  .pg-table th { text-align: left; background: var(--ink-050); color: var(--ink-950); font-weight: 700; padding: 11px 14px; border-bottom: 1px solid var(--line); font-size: 13px; }
+  .pg-table td { padding: 11px 14px; border-bottom: 1px solid var(--line); vertical-align: top; line-height: 1.55; }
+  .pg-table tr:last-child td { border-bottom: none; }
+  .pg-table td.weak { color: var(--warn); }
+  .pg-table td.strong { color: var(--ok); }
+  .table-wrap { overflow-x: auto; }
+
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 8px 0 18px; }
+  .two-col .pg-box { margin: 0; }
+  .two-col ul { margin-bottom: 0; }
+
+  .ic-tabs { display: flex; gap: 8px; margin-top: 20px; border-bottom: 2px solid var(--ink-100); flex-wrap: wrap; }
+  .ic-tab-btn {
+    padding: 12px 4px; margin-right: 22px; font-size: 14.5px; font-weight: 700; color: var(--muted);
+    background: none; border: none; border-bottom: 2px solid transparent; margin-bottom: -2px; cursor: pointer;
+  }
+  .ic-tab-btn.active { color: var(--brand-700); border-bottom-color: var(--brand-600); }
+  .ic-tabpanel[hidden] { display: none; }
+
+  /* A rendered CV page */
+  .cv-paper {
+    background: #fff; border: 1px solid var(--line-strong); border-radius: 6px; box-shadow: var(--shadow-md);
+    padding: 36px 42px; max-width: 820px; margin: 16px 0 10px;
+    font-family: 'Times New Roman', Georgia, serif; color: #111; font-size: 13.5px; line-height: 1.45;
+  }
+  .cv-paper .cv-name { text-align: center; font-size: 21px; font-weight: 700; letter-spacing: .04em; }
+  .cv-paper .cv-contact { text-align: center; font-size: 12.5px; margin-top: 3px; }
+  .cv-paper .cv-h { font-size: 13px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; border-bottom: 1px solid #111; margin: 16px 0 7px; padding-bottom: 2px; }
+  .cv-paper .cv-row { display: flex; justify-content: space-between; gap: 12px; }
+  .cv-paper .cv-row b { font-weight: 700; }
+  .cv-paper .cv-row span { white-space: nowrap; }
+  .cv-paper .cv-sub { font-style: italic; }
+  .cv-paper ul { margin: 3px 0 8px 20px; }
+  .cv-paper li { margin-bottom: 2px; }
+  .cv-paper p { margin: 2px 0; }
+
+  .letter-paper { font-family: 'Times New Roman', Georgia, serif; font-size: 14px; line-height: 1.6; }
+  .letter-paper p { margin-bottom: 11px; }
+
+  .ex-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 16px; }
+  .ex-card { background: var(--paper); border: 1px solid var(--line); border-radius: var(--radius-lg); padding: 20px 22px; }
+  .ex-card h4 { font-size: 16px; }
+  .ex-card p { font-size: 13.5px; color: var(--muted); margin: 6px 0 14px; line-height: 1.55; }
+
+  /* Checklist */
+  .check-item {
+    display: flex; align-items: flex-start; gap: 14px;
+    padding: 15px 18px; border: 1px solid var(--line); border-radius: var(--radius-md);
+    background: var(--paper); margin-bottom: 10px; cursor: pointer;
+    transition: border-color .15s ease, background .15s ease;
+  }
+  .check-item:hover { border-color: var(--line-strong); }
+  .check-item.done { background: var(--ok-bg); border-color: #bfe2cd; }
+  .check-box {
+    width: 22px; height: 22px; border-radius: 6px; border: 2px solid var(--line-strong);
+    flex-shrink: 0; margin-top: 1px; display: flex; align-items: center; justify-content: center;
+    font-size: 13px; color: #fff;
+  }
+  .check-item.done .check-box { background: var(--ok); border-color: var(--ok); }
+  .check-title { font-weight: 600; font-size: 15px; color: var(--ink-950); }
+  .check-desc { font-size: 13.5px; color: var(--muted); margin-top: 3px; line-height: 1.5; }
+  .group-title { font-size: 13px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: var(--ink-700); margin: 26px 0 12px; }
+
+  .pg-nav { display: flex; justify-content: space-between; margin-top: 40px; }
+
+  @media (max-width: 980px) {
+    .two-col, .ex-grid { grid-template-columns: 1fr; }
+    .cv-paper { padding: 22px 18px; font-size: 12.5px; }
+    .cv-paper .cv-row { flex-direction: column; gap: 0; }
+  }
+</style>
+</head>
+<body>
+
+<div class="app-shell">
+  <nav class="sidebar" id="mm-sidebar"></nav>
+
+  <main class="main">
+    <div class="page-eyebrow">Internships · Step 1</div>
+    <h1 class="page-title">CV &amp; Cover Letter</h1>
+    <p class="page-sub">How to write a one-page UK finance CV and a cover letter that gets you through the first screen, even when your experience is still limited.</p>
+
+    <div class="ic-tabs">
+      <button type="button" class="ic-tab-btn active" data-tab="guide">Guide</button>
+      <button type="button" class="ic-tab-btn" data-tab="examples">Examples</button>
+      <button type="button" class="ic-tab-btn" data-tab="checklist">Checklist</button>
+    </div>
+
+    <!-- ============================== GUIDE ============================== -->
+    <div class="ic-tabpanel" id="tab-guide">
+
+      <div class="pg-toc mt-24">
+        <h2>On this page</h2>
+        <ul>
+          <li><a href="#what">1. What recruiters look for</a></li>
+          <li><a href="#format">2. The UK CV format</a></li>
+          <li><a href="#sections">3. Section by section</a></li>
+          <li><a href="#bullets">4. How to write a bullet point</a></li>
+          <li><a href="#cover">5. The cover letter</a></li>
+        </ul>
+      </div>
+
+      <div class="pg-section" id="what">
+        <h2>1. What recruiters look for</h2>
+        <p>At spring level, your CV is often screened in <strong>under a minute</strong>. In that time it needs to prove three things:</p>
+        <ol>
+          <li><strong>You are academically strong:</strong> good grades, awards, a demanding subject choice.</li>
+          <li><strong>You do things outside class:</strong> work experience, clubs, responsibility, initiative.</li>
+          <li><strong>You are genuinely interested in finance:</strong> an investment club, a mock portfolio, a competition, something you wrote.</li>
+        </ol>
+        <p>Nobody expects a school student to have worked in a bank. What makes the difference is describing <strong>what you actually did</strong> in the experiences you have, with detail and numbers.</p>
+      </div>
+
+      <div class="pg-section" id="format">
+        <h2>2. The UK CV format</h2>
+        <p>A UK finance CV is <strong>one page</strong>, in English, in a simple black-and-white layout. It contains no photo and no personal details beyond how to contact you.</p>
+
+        <div class="two-col">
+          <div class="pg-box pg-strong">
+            <h4>Include</h4>
+            <ul>
+              <li>Full name, city and country</li>
+              <li>Phone with country code (+225 …)</li>
+              <li>Professional email: firstname.lastname@gmail.com</li>
+              <li>LinkedIn URL</li>
+              <li>Font size 10–11: Garamond, Times New Roman or Calibri</li>
+              <li>Most recent first in every section</li>
+            </ul>
+          </div>
+          <div class="pg-box pg-weak">
+            <h4>Leave out</h4>
+            <ul>
+              <li>Photo</li>
+              <li>Age, date of birth, nationality, marital status</li>
+              <li>Full postal address</li>
+              <li>A "Profile" or "Objective" paragraph</li>
+              <li>Colours, icons, two-column templates, skill bars (★★★☆)</li>
+              <li>"References available on request"</li>
+            </ul>
+          </div>
+        </div>
+
+        <h3>Section order</h3>
+        <ol>
+          <li>Education</li>
+          <li>Work Experience</li>
+          <li>Leadership &amp; Extracurricular Activities</li>
+          <li>Projects &amp; Achievements</li>
+          <li>Skills, Languages &amp; Interests</li>
+        </ol>
+        <div class="pg-box pg-highlight">
+          <p>Save and send your CV as a PDF named <strong>Firstname_Lastname_CV.pdf</strong>. A Word file can shift its layout on the recruiter's screen.</p>
+        </div>
+      </div>
+
+      <div class="pg-section" id="sections">
+        <h2>3. Section by section</h2>
+        <p>Every line on the page should show a skill firms want: <strong>analysis, teamwork, leadership, communication or initiative</strong>. Small experiences count when you describe what you did.</p>
+
+        <h3>Education</h3>
+        <ul>
+          <li>School name, city, dates (with "expected" for the end date), and your qualification and subjects: e.g. <em>Baccalauréat — Mathematics, Economics &amp; Social Sciences</em>.</li>
+          <li>Your average and your class rank if it is strong: <em>"Average: 16.4/20 (ranked 3rd of 45)"</em>.</li>
+          <li>Awards, honours, scholarships and competitions.</li>
+          <li>Your English level with proof if you have it (IELTS, Cambridge).</li>
+        </ul>
+
+        <h3>Work Experience</h3>
+        <ul>
+          <li>Include every work placement you have done at school, even one week long. Give the role in English: <em>"Work Experience Student, Finance Department"</em>.</li>
+          <li>Give the company, city and dates, and say "(1 week)" if that is the length. Being honest about length is expected.</li>
+          <li>Write <strong>2–3 bullets about what you did</strong>, not what you watched. Did you sort invoices, build a table in Excel, sit in on a client meeting, write a report at the end?</li>
+          <li>A placement outside finance still counts. A week at a pharmacy, law firm or telecoms company shows customer contact, organisation and professional behaviour.</li>
+        </ul>
+
+        <h3>Leadership &amp; Extracurricular Activities</h3>
+        <ul>
+          <li>Clubs (debating, investment or economics, Model UN, journalism), sports teams, music, volunteering, community or faith groups.</li>
+          <li>Give your role and what changed because of you: <em>"Treasurer: managed a 150,000 FCFA budget for 3 events."</em></li>
+          <li>Two activities with detail beat six listed with none.</li>
+        </ul>
+
+        <h3>Projects &amp; Achievements</h3>
+        <p>This is where a school student can stand out. Projects that work well for finance:</p>
+        <ul>
+          <li><strong>A mock stock portfolio</strong> tracked over 3 months, with a short write-up of each decision.</li>
+          <li><strong>A small business:</strong> selling at school, running an online shop, organising a paid event.</li>
+          <li><strong>Something you wrote:</strong> a LinkedIn article or blog post on a company, a stock market, or inflation in your country.</li>
+          <li><strong>Online courses</strong> with a certificate.</li>
+          <li><strong>Competitions:</strong> maths olympiads, business plan or pitch competitions.</li>
+        </ul>
+
+        <h3>Skills, Languages &amp; Interests</h3>
+        <ul>
+          <li><strong>Languages</strong> with a level: French (native), English (fluent, IELTS 7.0).</li>
+          <li><strong>Technical:</strong> Excel, PowerPoint, any coding. Only list what you could be tested on in an interview.</li>
+          <li><strong>Interests:</strong> be specific. "Football" says nothing; "Captain of the school football team, 2 seasons" gives the interviewer something to ask about.</li>
+        </ul>
+      </div>
+
+      <div class="pg-section" id="bullets">
+        <h2>4. How to write a bullet point</h2>
+        <p>Every bullet follows one formula:</p>
+        <div class="pg-box pg-highlight">
+          <p style="font-size:16px; text-align:center;"><strong>Action verb</strong> + <strong>what you did</strong> + <strong>result or number</strong></p>
+        </div>
+        <p>Start with a past-tense verb, keep it to one or two lines, and add a number wherever you honestly can.</p>
+
+        <div class="table-wrap">
+          <table class="pg-table">
+            <thead><tr><th style="width:40%">Weak</th><th>Strong</th></tr></thead>
+            <tbody>
+              <tr><td class="weak">Work experience at a bank.</td><td class="strong">Shadowed 3 client advisers at a retail bank branch and summarised how loan applications are assessed in a 2-page report.</td></tr>
+              <tr><td class="weak">I helped in the accounting department.</td><td class="strong">Sorted and filed 200+ supplier invoices by due date, helping the team prepare month-end payments.</td></tr>
+              <tr><td class="weak">Member of the debating club.</td><td class="strong">Debated in 6 inter-school competitions on economic topics; reached the semi-final of the 2025 regional tournament.</td></tr>
+              <tr><td class="weak">I like the stock market.</td><td class="strong">Built and tracked a mock portfolio of 8 stocks over 3 months, writing a weekly note on each change.</td></tr>
+              <tr><td class="weak">I organised an event.</td><td class="strong">Organised a charity football tournament for 80 students, raising 250,000 FCFA for a local orphanage.</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="two-col">
+          <div class="pg-box pg-strong">
+            <h4>Useful verbs</h4>
+            <p>analysed, built, prepared, organised, led, presented, researched, managed, created, negotiated, raised, reduced, won</p>
+          </div>
+          <div class="pg-box pg-weak">
+            <h4>Avoid</h4>
+            <p>"helped with", "was responsible for", "participated in", and full sentences starting with "I".</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="pg-section" id="cover">
+        <h2>5. The cover letter</h2>
+        <p>A cover letter answers three questions in under one page (about <strong>300–400 words</strong>): <strong>why this firm, why this division, and why you</strong>. Many spring week applications replace it with 2–3 short motivation questions of 200–300 words each; the same structure works for both.</p>
+
+        <div class="table-wrap">
+          <table class="pg-table">
+            <thead><tr><th>Paragraph</th><th>Purpose</th><th>What to write</th></tr></thead>
+            <tbody>
+              <tr><td><strong>1. Introduction</strong></td><td>Who you are, what you're applying for</td><td>Programme name, year and city; your school or university; one strong result</td></tr>
+              <tr><td><strong>2. Why this firm</strong></td><td>Show you did your research</td><td>1–2 specific facts: a recent deal, a value in action, a conversation with someone who works there, an event you attended</td></tr>
+              <tr><td><strong>3. Why this division</strong></td><td>Show you understand the job</td><td>What the division does in plain words, which part interests you, linked to something you did</td></tr>
+              <tr><td><strong>4. Why you</strong></td><td>Prove it with evidence</td><td>2–3 examples from your CV, each with a skill and a result</td></tr>
+              <tr><td><strong>5. Close</strong></td><td>Short and polite</td><td>Thank them; say you would welcome the chance to discuss your application</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>Rules</h3>
+        <ul>
+          <li><strong>Name the right firm and programme.</strong> A letter with another bank's name in it is rejected instantly.</li>
+          <li><strong>The swap test:</strong> if a sentence would still be true with another firm's name in it, it is too generic. Replace it with a specific fact.</li>
+          <li>Open with "Dear Hiring Team" and end with "Yours faithfully". If you know the recruiter's name, write "Dear Ms Koné" and end with "Yours sincerely".</li>
+          <li>Find your facts on the firm's website, in recent news, and in your company profiles (Step 3).</li>
+        </ul>
+
+        <h3>"Why this firm": weak vs strong</h3>
+        <div class="pg-box pg-weak">
+          <h4>Weak</h4>
+          <p>"I want to work at your firm because it is a global leader with a strong culture and excellent training."</p>
+          <p><em>This passes the swap test for every bank in the world, so it tells the reader nothing.</em></p>
+        </div>
+        <div class="pg-box pg-strong">
+          <h4>Strong (fictional, school level)</h4>
+          <p>"I first became interested in [Firm] at your online insight session for school students in March, where an analyst explained how the team helped a West African telecoms company raise capital. I had followed that company's results for my school investment club, and hearing how the deal was structured showed me how much of the work is research and clear communication, the two things I enjoy most in running our weekly market briefing."</p>
+        </div>
+      </div>
+
+      <div class="pg-nav">
+        <a class="btn btn-ghost btn-sm" href="internships.html">← Internship Hub</a>
+        <button type="button" class="btn btn-primary btn-sm" data-goto="examples">See the examples →</button>
+      </div>
+    </div>
+
+    <!-- ============================== EXAMPLES ============================== -->
+    <div class="ic-tabpanel" id="tab-examples" hidden>
+
+      <div class="pg-section">
+        <h2>Sample CV: school student</h2>
+        <p>A fictional student with two work placements, two clubs and one personal project. This is what a strong CV can look like <strong>before university</strong>.</p>
+
+        <div class="cv-paper">
+          <div class="cv-name">AMINATA KONÉ</div>
+          <div class="cv-contact">Abidjan, Côte d'Ivoire | +225 07 00 00 00 00 | aminata.kone@gmail.com | linkedin.com/in/aminatakone</div>
+
+          <div class="cv-h">Education</div>
+          <div class="cv-row"><b>Lycée Sainte-Marie de Cocody</b><span>Abidjan, Côte d'Ivoire | Sep 2023 – Jun 2026 (expected)</span></div>
+          <div class="cv-sub">Baccalauréat — Mathematics, Economics &amp; Social Sciences</div>
+          <ul>
+            <li>Average: 16.4/20 (ranked 3rd of 45); highest distinction from the class council in 3 terms.</li>
+            <li>English: IELTS Academic 7.0 (2025).</li>
+          </ul>
+
+          <div class="cv-h">Work Experience</div>
+          <div class="cv-row"><b>Ivoire Capital Bank — Retail Banking</b><span>Abidjan | Feb 2025 (1 week)</span></div>
+          <div class="cv-sub">Work Experience Student</div>
+          <ul>
+            <li>Shadowed 3 client advisers and summarised how personal loan applications are assessed in a 2-page report.</li>
+            <li>Built an Excel table comparing 5 savings products by rate and fees, used by an adviser in a client meeting.</li>
+          </ul>
+          <div class="cv-row"><b>Konan &amp; Associés — Accounting Firm</b><span>Abidjan | Jan 2024 (1 week)</span></div>
+          <div class="cv-sub">Work Experience Student</div>
+          <ul>
+            <li>Sorted and filed 200+ supplier invoices by due date ahead of month-end payments.</li>
+            <li>Presented what I learned about a small firm's accounts to a class of 35 students.</li>
+          </ul>
+
+          <div class="cv-h">Leadership &amp; Extracurricular Activities</div>
+          <div class="cv-row"><b>Economics &amp; Investment Club — Co-founder and Treasurer</b><span>Oct 2024 – Present</span></div>
+          <ul>
+            <li>Co-founded a club of 25 members; run a weekly 20-minute market news briefing.</li>
+            <li>Manage a 150,000 FCFA budget covering 3 events, including a talk by a local bank manager.</li>
+          </ul>
+          <div class="cv-row"><b>Debating Club — Member</b><span>Sep 2023 – Present</span></div>
+          <ul>
+            <li>Competed in 6 inter-school debates; semi-finalist at the 2025 Abidjan regional tournament.</li>
+          </ul>
+
+          <div class="cv-h">Projects &amp; Achievements</div>
+          <div class="cv-row"><b>Mock Stock Portfolio — Personal Project</b><span>Mar – Jun 2025</span></div>
+          <ul>
+            <li>Built and tracked a portfolio of 8 African and US stocks over 3 months, writing a weekly note on each decision.</li>
+            <li>Returned +6% against +4% for the benchmark index; published a summary on LinkedIn (1,200 views).</li>
+          </ul>
+          <div class="cv-row"><b>National Mathematics Olympiad — Regional Finalist</b><span>2025</span></div>
+
+          <div class="cv-h">Skills, Languages &amp; Interests</div>
+          <p><b>Languages:</b> French (native), English (fluent, IELTS 7.0), Dioula (conversational)</p>
+          <p><b>Technical:</b> Excel (tables, formulas, charts), PowerPoint, Canva</p>
+          <p><b>Interests:</b> Basketball (school team, 2 seasons); business biographies</p>
+        </div>
+        <p class="small muted">Fictional example. Names, firms and figures are illustrative.</p>
+
+        <h3>Why it works</h3>
+        <ul>
+          <li>Every bullet starts with a verb and most include a number.</li>
+          <li>Two one-week placements look substantial because each has concrete tasks.</li>
+          <li>The club and the portfolio prove an interest in finance, without the word "passionate".</li>
+          <li>Everything on the page could be discussed in an interview.</li>
+        </ul>
+      </div>
+
+      <div class="pg-section">
+        <h2>The target: a university application</h2>
+        <p>These are a real-format CV and cover letter written for a <strong>2027 Investment Banking Summer Analyst</strong> application, the stage after a spring week. Use them to see the standard you're building towards, not to copy the content.</p>
+
+        <div class="ex-grid">
+          <div class="ex-card">
+            <h4>University CV</h4>
+            <p>BSc Finance student: an operations internship, a spring insight, an M&amp;A summer internship, society roles.</p>
+            <a class="btn btn-primary btn-sm" href="assets/internships/example-cv-university.pdf" target="_blank" rel="noopener">Open PDF →</a>
+          </div>
+          <div class="ex-card">
+            <h4>University cover letter</h4>
+            <p>Five paragraphs: introduction, why the firm, relevant experience, roles alongside the degree, close.</p>
+            <a class="btn btn-primary btn-sm" href="assets/internships/example-cover-letter-university.pdf" target="_blank" rel="noopener">Open PDF →</a>
+          </div>
+        </div>
+
+        <h3>What the CV does well</h3>
+        <ul>
+          <li><strong>Numbers in almost every bullet:</strong> "12 UK business services companies", "300+ client portfolio statements", "from three hours to twenty minutes".</li>
+          <li><strong>Results, not tasks:</strong> the comparables analysis "became the benchmarking section of a live sell-side pitch".</li>
+          <li><strong>Clear progression:</strong> operations intern → spring insight → M&amp;A summer internship. Each role builds on the last.</li>
+          <li><strong>Extracurriculars with evidence:</strong> vice-captain "for a squad of twenty"; tutoring where "all six passed at grade 5 or above".</li>
+          <li><strong>Honest skill levels:</strong> Python (basic), Bloomberg (basic).</li>
+        </ul>
+
+        <h3>What the cover letter does well</h3>
+        <ul>
+          <li><strong>A specific "why this firm":</strong> it cites an insight afternoon and a story an associate told, not a line from the website.</li>
+          <li><strong>Every claim is backed by a CV example</strong>, with what each one taught.</li>
+          <li><strong>A plain, confident tone:</strong> no "I am passionate about finance", no exaggeration.</li>
+        </ul>
+
+        <h3>From school to university: what each line becomes</h3>
+        <div class="table-wrap">
+          <table class="pg-table">
+            <thead><tr><th>At school</th><th>At university</th></tr></thead>
+            <tbody>
+              <tr><td>One-week work placement in a bank</td><td>Summer internship in M&amp;A</td></tr>
+              <tr><td>One-week placement in an accounting firm</td><td>Operations internship</td></tr>
+              <tr><td>Investment club, mock portfolio</td><td>Equity research analyst, university investment society</td></tr>
+              <tr><td>Maths olympiad, pitch competition</td><td>National investment competition finalist</td></tr>
+              <tr><td>Online courses, IELTS</td><td>Bloomberg Market Concepts, CFA Investment Foundations</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="pg-nav">
+        <button type="button" class="btn btn-ghost btn-sm" data-goto="guide">← Guide</button>
+        <button type="button" class="btn btn-primary btn-sm" data-goto="checklist">Check your CV →</button>
+      </div>
+    </div>
+
+    <!-- ============================== CHECKLIST ============================== -->
+    <div class="ic-tabpanel" id="tab-checklist" hidden>
+      <div class="card card-pad mt-24">
+        <div class="between">
+          <div class="small muted" style="font-weight:600;">YOUR PROGRESS</div>
+          <div class="small" id="cl-count" style="font-weight:700; color:var(--ink-950);">0 / 0</div>
+        </div>
+        <div class="progress-track mt-8"><div class="progress-fill" id="cl-fill" style="width:0%"></div></div>
+      </div>
+      <div id="cl-groups"></div>
+
+      <div class="pg-nav">
+        <button type="button" class="btn btn-ghost btn-sm" data-goto="examples">← Examples</button>
+        <a class="btn btn-primary btn-sm" href="internships.html">Back to the Hub →</a>
+      </div>
+    </div>
+  </main>
+</div>
+
+<script src="assets/js/app.js"></script>
+<script>
+  const user = MMApp.requireUser();
+
+  const CHECKLIST = [
+    { group: 'Your CV', items: [
+      { id: 'one-page', title: 'One page, saved as a PDF', desc: 'Named Firstname_Lastname_CV.pdf.' },
+      { id: 'no-personal', title: 'No photo, age, nationality or full address', desc: 'Only name, city, phone, email and LinkedIn at the top.' },
+      { id: 'reverse-chrono', title: 'Most recent first in every section', desc: 'Education, work experience and activities all in reverse order.' },
+      { id: 'verbs-numbers', title: 'Every bullet starts with an action verb', desc: 'And most include a number: people, amounts, results, time saved.' },
+      { id: 'work-exp', title: 'All work placements included', desc: 'Each with 2–3 bullets on what you did.' },
+      { id: 'activities', title: 'At least one club role and one personal project', desc: 'With detail: your role and what changed because of you.' },
+      { id: 'languages', title: 'Language levels stated honestly', desc: 'With proof (IELTS, Cambridge) where you have it.' }
+    ]},
+    { group: 'Your cover letter', items: [
+      { id: 'right-firm', title: 'The right firm, programme and division', desc: 'Checked twice before every submission.' },
+      { id: 'swap-test', title: 'Passes the swap test', desc: 'At least one fact in "why this firm" that would not fit any other firm.' }
+    ]},
+    { group: 'Before you send', items: [
+      { id: 'proofread', title: 'Spelling and grammar checked, then read aloud once', desc: 'Reading aloud catches the errors spellcheck misses.' },
+      { id: 'mentor-review', title: 'Reviewed by a MyMentor mentor', desc: 'Share your CV and letter with your mentor before your first application.' }
+    ]}
+  ];
+
+  // Tabs
+  const tabBtns = document.querySelectorAll('.ic-tab-btn');
+  const panels = {
+    guide: document.getElementById('tab-guide'),
+    examples: document.getElementById('tab-examples'),
+    checklist: document.getElementById('tab-checklist')
+  };
+  function showTab(key) {
+    tabBtns.forEach(b => b.classList.toggle('active', b.dataset.tab === key));
+    Object.entries(panels).forEach(([k, p]) => { p.hidden = k !== key; });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+  tabBtns.forEach(b => b.addEventListener('click', () => showTab(b.dataset.tab)));
+  document.querySelectorAll('[data-goto]').forEach(b => b.addEventListener('click', () => showTab(b.dataset.goto)));
+
+  if (user) {
+    MMApp.renderSidebar('internship-cv');
+    let progress = MMApp.getProgress(user);
+    let checklist = progress.internshipCvChecklist || {};
+    const total = CHECKLIST.reduce((n, g) => n + g.items.length, 0);
+
+    function render() {
+      const done = CHECKLIST.flatMap(g => g.items).filter(i => checklist[i.id]).length;
+      document.getElementById('cl-count').textContent = `${done} / ${total}`;
+      document.getElementById('cl-fill').style.width = `${(done / total) * 100}%`;
+      const container = document.getElementById('cl-groups');
+      container.innerHTML = CHECKLIST.map(g => `
+        <div class="group-title">${g.group}</div>
+        ${g.items.map(item => `
+          <div class="check-item ${checklist[item.id] ? 'done' : ''}" data-id="${item.id}">
+            <div class="check-box">${checklist[item.id] ? '✓' : ''}</div>
+            <div style="flex:1;">
+              <div class="check-title">${item.title}</div>
+              <div class="check-desc">${item.desc}</div>
+            </div>
+          </div>`).join('')}
+      `).join('');
+      container.querySelectorAll('.check-item').forEach(el => {
+        el.addEventListener('click', () => {
+          checklist[el.dataset.id] = !checklist[el.dataset.id];
+          progress = MMApp.setProgress(user, { internshipCvChecklist: checklist });
+          render();
+        });
+      });
+    }
+    render();
+  }
+</script>
+</body>
+</html>
