@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Interview Preparation · MyMentor</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/theme.css" />
+<style>
+  .pg-toc { background: var(--canvas); border: 1px solid var(--line); border-radius: var(--radius-lg); padding: 22px 28px; }
+  .pg-toc h2 { font-size: 15px; letter-spacing: .04em; text-transform: uppercase; color: var(--brand-700); margin-bottom: 10px; }
+  .pg-toc ul { list-style: none; display: flex; flex-direction: column; }
+  .pg-toc li { border-bottom: 1px solid var(--line); }
+  .pg-toc li:last-child { border-bottom: none; }
+  .pg-toc a { display: block; padding: 8px 2px; font-size: 13.5px; font-weight: 500; color: var(--ink); }
+  .pg-toc a:hover { color: var(--brand-700); }
+
+  .pg-section { margin-top: 34px; }
+  .pg-section h2 { font-size: 22px; padding-bottom: 12px; margin-bottom: 18px; border-bottom: 2px solid var(--ink-100); }
+  .pg-section h3 { font-size: 17px; color: var(--brand-700); margin-top: 26px; margin-bottom: 12px; }
+  .pg-section h4 { font-size: 14.5px; font-weight: 700; color: var(--ink-950); margin-bottom: 6px; }
+  .pg-section p { color: var(--ink); margin-bottom: 13px; line-height: 1.7; font-size: 14.5px; }
+  .pg-section ul, .pg-section ol { margin: 0 0 16px 22px; }
+  .pg-section li { color: var(--ink); margin-bottom: 7px; line-height: 1.6; font-size: 14.5px; }
+  .pg-section strong { color: var(--ink-950); font-weight: 700; }
+  .pg-section em { color: var(--muted); }
+
+  .pg-box { border-radius: var(--radius-md); padding: 18px 20px; margin: 16px 0; }
+  .pg-box p:last-child, .pg-box ul:last-child, .pg-box ol:last-child { margin-bottom: 0; }
+  .pg-weak { background: var(--warn-bg); border-left: 4px solid var(--warn); }
+  .pg-strong { background: var(--ok-bg); border-left: 4px solid var(--ok); }
+  .pg-highlight { background: var(--brand-100); border: 1.5px solid var(--brand-500); }
+
+  .pg-table { width: 100%; border-collapse: collapse; font-size: 14px; margin: 8px 0 18px; background: var(--paper); border-radius: var(--radius-md); overflow: hidden; border: 1px solid var(--line); }
+  .pg-table th { text-align: left; background: var(--ink-050); color: var(--ink-950); font-weight: 700; padding: 11px 14px; border-bottom: 1px solid var(--line); font-size: 13px; }
+  .pg-table td { padding: 11px 14px; border-bottom: 1px solid var(--line); vertical-align: top; line-height: 1.55; }
+  .pg-table tr:last-child td { border-bottom: none; }
+  .table-wrap { overflow-x: auto; }
+
+  .ic-tabs { display: flex; gap: 8px; margin-top: 20px; border-bottom: 2px solid var(--ink-100); flex-wrap: wrap; }
+  .ic-tab-btn {
+    padding: 12px 4px; margin-right: 22px; font-size: 14.5px; font-weight: 700; color: var(--muted);
+    background: none; border: none; border-bottom: 2px solid transparent; margin-bottom: -2px; cursor: pointer;
+  }
+  .ic-tab-btn.active { color: var(--brand-700); border-bottom-color: var(--brand-600); }
+  .ic-tabpanel[hidden], [hidden] { display: none !important; }
+
+  /* STAR cards */
+  .star { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin: 10px 0 18px; }
+  .star div { background: var(--paper); border: 1px solid var(--line); border-radius: var(--radius-md); padding: 16px 18px; }
+  .star b { display: block; font-family: var(--font-display); font-size: 22px; color: var(--brand-700); }
+  .star strong { display: block; font-size: 14px; color: var(--ink-950); margin-top: 2px; }
+  .star p { font-size: 13px !important; color: var(--muted) !important; margin: 6px 0 0 !important; line-height: 1.5 !important; }
+  .star .time { font-size: 11.5px; font-weight: 700; color: var(--muted-2); margin-top: 8px; display: block; }
+
+  /* Question bank */
+  .filters { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 22px; }
+  .filter {
+    border: 1px solid var(--line-strong); background: var(--paper); color: var(--ink-800);
+    border-radius: 999px; padding: 8px 16px; font-size: 13.5px; font-weight: 600; cursor: pointer;
+  }
+  .filter.active { background: var(--ink-950); color: #fff; border-color: var(--ink-950); }
+  .bank-note { font-size: 13px; color: var(--muted); margin-top: 14px; }
+
+  .q-item { background: var(--paper); border: 1px solid var(--line); border-radius: var(--radius-md); margin-top: 10px; overflow: hidden; }
+  .q-item.avoid { background: var(--warn-bg); border-color: #f0d8bf; }
+  .q-head {
+    width: 100%; text-align: left; background: none; border: none; font: inherit; cursor: pointer;
+    padding: 15px 18px; display: flex; align-items: center; gap: 12px;
+  }
+  .q-head:hover { background: var(--ink-050); }
+  .q-item.avoid .q-head:hover { background: transparent; cursor: default; }
+  .q-q { flex: 1; font-size: 14.5px; font-weight: 600; color: var(--ink-950); line-height: 1.5; }
+  .q-mark { font-size: 12px; font-weight: 700; color: var(--ok); white-space: nowrap; }
+  .q-caret { color: var(--muted-2); font-size: 13px; }
+  .q-body { padding: 0 18px 18px; border-top: 1px solid var(--line); padding-top: 14px; }
+  .q-how { font-size: 14px; line-height: 1.65; color: var(--ink); }
+  .q-how b { color: var(--brand-700); }
+  .q-answer { margin-top: 14px; }
+  .q-answer label { display: block; font-size: 12.5px; font-weight: 700; color: var(--ink-800); margin-bottom: 6px; }
+  .q-answer textarea {
+    width: 100%; min-height: 110px; resize: vertical; padding: 12px 14px; border-radius: var(--radius-sm);
+    border: 1.5px solid var(--line-strong); background: var(--canvas); font-size: 14px; font-family: inherit;
+    color: var(--ink); line-height: 1.55;
+  }
+  .q-answer textarea:focus { outline: none; border-color: var(--brand-500); }
+  .q-foot { display: flex; justify-content: space-between; align-items: center; margin-top: 6px; font-size: 12px; color: var(--muted); }
+  .q-foot .ok { color: var(--ok); font-weight: 700; }
+
+  .stat-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 20px; }
+  .stat { background: var(--paper); border: 1px solid var(--line); border-radius: var(--radius-md); padding: 12px 16px; min-width: 120px; }
+  .stat .n { font-family: var(--font-display); font-size: 24px; color: var(--ink-950); }
+  .stat .l { font-size: 12px; color: var(--muted); font-weight: 600; }
+
+  .sources { margin-top: 36px; font-size: 12.5px; color: var(--muted); }
+  .sources a { color: var(--ink-700); text-decoration: underline; }
+  .sources li { margin: 0 0 4px 18px; }
+
+  .pg-nav { display: flex; justify-content: space-between; margin-top: 40px; gap: 12px; flex-wrap: wrap; }
+
+  @media (max-width: 980px) {
+    .star { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="app-shell">
+  <nav class="sidebar" id="mm-sidebar"></nav>
+
+  <main class="main">
+    <div class="page-eyebrow">Internships · Step 4</div>
+    <h1 class="page-title">Interview Preparation</h1>
+    <p class="page-sub">At spring level most interviews are recorded video interviews. Here is how they work, how to structure an answer, and the questions to prepare.</p>
+
+    <div class="ic-tabs">
+      <button type="button" class="ic-tab-btn active" data-tab="guide">Guide</button>
+      <button type="button" class="ic-tab-btn" data-tab="bank">Question bank</button>
+    </div>
+
+    <!-- ============================== GUIDE ============================== -->
+    <div class="ic-tabpanel" id="tab-guide">
+
+      <div class="pg-toc mt-24">
+        <h2>On this page</h2>
+        <ul>
+          <li><a href="#formats">1. The formats you'll face</a></li>
+          <li><a href="#star">2. The STAR framework</a></li>
+          <li><a href="#types">3. The four types of question</a></li>
+          <li><a href="#delivery">4. Recording a good video interview</a></li>
+          <li><a href="#mistakes">5. Common mistakes</a></li>
+        </ul>
+      </div>
+
+      <div class="pg-section" id="formats">
+        <h2>1. The formats you'll face</h2>
+        <div class="table-wrap">
+          <table class="pg-table">
+            <thead><tr><th style="width:26%">Format</th><th>What happens</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Recorded video interview</strong><div class="small muted">HireVue and similar. The most common at spring level.</div></td><td>You record answers alone, with no interviewer. Usually 3–5 questions, around 30 seconds to prepare and 2–3 minutes to answer each. A person watches the recordings afterwards. Used by JP Morgan, Goldman Sachs, Morgan Stanley and others.</td></tr>
+              <tr><td><strong>Phone or video interview</strong></td><td>20–30 minutes with a recruiter or an analyst. Mostly motivation and behavioural questions, with a chance to ask your own.</td></tr>
+              <tr><td><strong>Assessment centre</strong><div class="small muted">Less common for spring weeks.</div></td><td>Half a day: a group exercise, a short case study or presentation, and one or two interviews.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="pg-box pg-highlight">
+          <p>You usually get several days to complete a recorded interview. Use them: prepare your stories first, then record. Do not start it the evening it arrives.</p>
+        </div>
+      </div>
+
+      <div class="pg-section" id="star">
+        <h2>2. The STAR framework</h2>
+        <p>Every "tell me about a time when…" answer follows the same four steps. It keeps you to two minutes and stops you rambling.</p>
+        <div class="star">
+          <div><b>S</b><strong>Situation</strong><p>Where and when, in one or two sentences.</p><span class="time">~15 seconds</span></div>
+          <div><b>T</b><strong>Task</strong><p>What had to be done, and what your responsibility was.</p><span class="time">~15 seconds</span></div>
+          <div><b>A</b><strong>Action</strong><p>What <em>you</em> did, step by step. The longest part.</p><span class="time">~60 seconds</span></div>
+          <div><b>R</b><strong>Result</strong><p>How it ended, with a number, and what you learned.</p><span class="time">~30 seconds</span></div>
+        </div>
+
+        <h3>A worked example</h3>
+        <p><strong>Question:</strong> Tell me about a time you worked under pressure.</p>
+        <div class="pg-box pg-strong">
+          <p><strong>Situation.</strong> "In February our school investment club had to present at an inter-school event. Two days before, the student presenting our stock pick dropped out with flu."</p>
+          <p><strong>Task.</strong> "As treasurer I was the only other member who knew the research, so I had to take over the presentation while still preparing for two mock exams that week."</p>
+          <p><strong>Action.</strong> "I split the work in two. I blocked two hours each evening for the presentation and kept the mornings for revision. I cut our slides from fourteen to six so I could learn the argument rather than a script, asked a teacher to hear me once, and rewrote the opening after her feedback because it started with numbers instead of the story."</p>
+          <p><strong>Result.</strong> "We came second of twelve teams, and the judges said our argument was the clearest. I learned that under time pressure, cutting the material down is faster than trying to learn all of it."</p>
+        </div>
+        <div class="pg-box pg-weak">
+          <h4>The same story, badly told</h4>
+          <p>"We had a presentation and someone got ill so it was quite stressful, but we worked hard as a team and in the end it went really well and everyone was happy."</p>
+          <p><em>No detail, no actions, no result, and no "I".</em></p>
+        </div>
+
+        <h3>Build a story bank</h3>
+        <p>You do not need a story for every question. Prepare <strong>five or six</strong> strong ones in STAR form, and reuse them: most behavioural questions are asking for the same material from a different angle. Good sources: a club role, a work placement, a personal project, a sports team, a competition, a time something went wrong.</p>
+      </div>
+
+      <div class="pg-section" id="types">
+        <h2>3. The four types of question</h2>
+        <div class="table-wrap">
+          <table class="pg-table">
+            <thead><tr><th style="width:22%">Type</th><th>What they're checking</th><th>Prepare</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Motivation</strong></td><td>Do you know what the job is, and are you applying for a reason?</td><td>Why finance, why this firm, why this division, and your own introduction</td></tr>
+              <tr><td><strong>Behavioural</strong></td><td>Can you work with people, take responsibility and recover from setbacks?</td><td>5–6 STAR stories covering teamwork, leadership, failure, pressure and conflict</td></tr>
+              <tr><td><strong>Technical &amp; commercial</strong></td><td>Do you understand the basics and follow the news? Expectations are low at spring level.</td><td>What the divisions do, a few core concepts, and one deal or market story you can discuss</td></tr>
+              <tr><td><strong>Your questions</strong></td><td>Have you thought about the firm at all?</td><td>Two or three genuine questions you could not have answered from the website</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>Open the <strong>Question bank</strong> tab for the questions themselves, with notes on how to answer and space to draft your own.</p>
+      </div>
+
+      <div class="pg-section" id="delivery">
+        <h2>4. Recording a good video interview</h2>
+        <ul>
+          <li><strong>Set up properly:</strong> camera at eye level (put your laptop on some books), a light in front of you rather than a window behind you, plain background, quiet room.</li>
+          <li><strong>Dress as you would for the office:</strong> a suit or a blazer. It changes how you speak, too.</li>
+          <li><strong>Look at the camera</strong>, not at your own face on the screen. Practise this: it feels odd at first.</li>
+          <li><strong>Lead with your best material.</strong> The first 15–30 seconds decide how the rest is heard. Start with a one-line summary of your answer, then the detail.</li>
+          <li><strong>Do not read a script.</strong> Notes as bullet points beside the camera are fine; reading is obvious and kills your delivery.</li>
+          <li><strong>Practise by recording yourself</strong> on your phone and watching it back. Check your pace, your filler words and whether you finished inside the time.</li>
+          <li><strong>Use the preparation time:</strong> 30 seconds is enough to pick your story and your first sentence.</li>
+        </ul>
+      </div>
+
+      <div class="pg-section" id="mistakes">
+        <h2>5. Common mistakes</h2>
+        <div class="table-wrap">
+          <table class="pg-table">
+            <thead><tr><th style="width:42%">Mistake</th><th>Do this instead</th></tr></thead>
+            <tbody>
+              <tr><td>"I am passionate about finance."</td><td>Name the moment you got interested and what you did about it.</td></tr>
+              <tr><td>An answer that would fit any bank.</td><td>One fact that only fits this firm, from your company profile.</td></tr>
+              <tr><td>Saying "we" throughout a behavioural answer.</td><td>Say what <strong>you</strong> did. The interviewer is scoring you.</td></tr>
+              <tr><td>Rambling past three minutes.</td><td>Use STAR and stop at the result.</td></tr>
+              <tr><td>Pretending to know a technical answer.</td><td>Say what you do know, then "I don't know, but I would find out by…".</td></tr>
+              <tr><td>No questions at the end.</td><td>Have three ready; ask two.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="sources">
+        <strong>Sources</strong> (checked September 2026)
+        <ul>
+          <li><a href="https://the-trackr.com/blog/the-hirevue-interview-guide/" target="_blank" rel="noopener">Trackr: The HireVue interview guide</a></li>
+          <li><a href="https://the-trackr.com/blog/everything-you-need-to-know-about-spring-week-internship-assessments/" target="_blank" rel="noopener">Trackr: Spring week internship assessments</a></li>
+        </ul>
+      </div>
+
+      <div class="pg-nav">
+        <a class="btn btn-ghost btn-sm" href="internship-companies.html">← Step 3: Companies &amp; Tracker</a>
+        <button type="button" class="btn btn-primary btn-sm" data-goto="bank">Open the question bank →</button>
+      </div>
+    </div>
+
+    <!-- ============================== QUESTION BANK ============================== -->
+    <div class="ic-tabpanel" id="tab-bank" hidden>
+      <div class="stat-row" id="qb-stats"></div>
+      <div class="filters" id="qb-filters"></div>
+      <p class="bank-note">Open a question to see how to answer it and to draft your own. Your drafts are saved automatically.</p>
+      <div id="qb-list"></div>
+
+      <div class="pg-nav">
+        <button type="button" class="btn btn-ghost btn-sm" data-goto="guide">← Guide</button>
+        <a class="btn btn-primary btn-sm" href="internships.html">Back to the Hub →</a>
+      </div>
+    </div>
+  </main>
+</div>
+
+<script src="assets/js/app.js"></script>
+<script src="assets/js/data/interview-questions.js"></script>
+<script>
+  const user = MMApp.requireUser();
+
+  const CATS = [
+    { key: 'all', label: 'All' },
+    { key: 'motivation', label: 'Motivation' },
+    { key: 'behavioural', label: 'Behavioural' },
+    { key: 'technical', label: 'Technical & commercial' },
+    { key: 'ask', label: 'Questions to ask them' }
+  ];
+  const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+
+  const tabBtns = document.querySelectorAll('.ic-tab-btn');
+  const panels = { guide: document.getElementById('tab-guide'), bank: document.getElementById('tab-bank') };
+  function showTab(key) {
+    tabBtns.forEach(b => b.classList.toggle('active', b.dataset.tab === key));
+    Object.entries(panels).forEach(([k, p]) => { p.hidden = k !== key; });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+  tabBtns.forEach(b => b.addEventListener('click', () => showTab(b.dataset.tab)));
+  document.querySelectorAll('[data-goto]').forEach(b => b.addEventListener('click', () => showTab(b.dataset.goto)));
+
+  if (user) {
+    MMApp.renderSidebar('internship-interviews');
+    let progress = MMApp.getProgress(user);
+    let answers = progress.interviewAnswers || {};
+    let filter = 'all';
+    let open = null;
+
+    const drafted = () => MM_QUESTIONS.filter(q => !q.avoid && (answers[q.id] || '').trim()).length;
+
+    function renderStats() {
+      const total = MM_QUESTIONS.filter(q => !q.avoid).length;
+      const byCat = k => MM_QUESTIONS.filter(q => q.cat === k && !q.avoid && (answers[q.id] || '').trim()).length;
+      document.getElementById('qb-stats').innerHTML = `
+        <div class="stat"><div class="n">${drafted()}/${total}</div><div class="l">Answers drafted</div></div>
+        <div class="stat"><div class="n">${byCat('motivation')}</div><div class="l">Motivation</div></div>
+        <div class="stat"><div class="n">${byCat('behavioural')}</div><div class="l">Behavioural</div></div>
+        <div class="stat"><div class="n">${byCat('technical')}</div><div class="l">Technical</div></div>`;
+    }
+
+    document.getElementById('qb-filters').innerHTML = CATS.map(c =>
+      `<button type="button" class="filter ${c.key === 'all' ? 'active' : ''}" data-filter="${c.key}">${c.label}</button>`).join('');
+    document.querySelectorAll('[data-filter]').forEach(b => b.addEventListener('click', () => {
+      filter = b.dataset.filter;
+      document.querySelectorAll('[data-filter]').forEach(x => x.classList.toggle('active', x === b));
+      renderList();
+    }));
+
+    function renderList() {
+      const list = MM_QUESTIONS.filter(q => filter === 'all' || q.cat === filter);
+      document.getElementById('qb-list').innerHTML = list.map(q => {
+        const a = answers[q.id] || '';
+        const isOpen = open === q.id;
+        if (q.avoid) {
+          return `<div class="q-item avoid"><div class="q-head"><span class="q-q">${esc(q.q)}</span></div>
+            <div class="q-body"><div class="q-how">${esc(q.how)}</div></div></div>`;
+        }
+        return `<div class="q-item">
+          <button type="button" class="q-head" data-q="${q.id}" aria-expanded="${isOpen}">
+            <span class="q-q">${esc(q.q)}</span>
+            ${a.trim() ? '<span class="q-mark">✓ Drafted</span>' : ''}
+            <span class="q-caret">${isOpen ? '▲' : '▼'}</span>
+          </button>
+          ${isOpen ? `<div class="q-body">
+            <div class="q-how"><b>How to answer:</b> ${esc(q.how)}</div>
+            <div class="q-answer">
+              <label for="ans-${q.id}">My answer${q.cat === 'behavioural' ? ' (use STAR: Situation, Task, Action, Result)' : ''}</label>
+              <textarea id="ans-${q.id}" data-ans="${q.id}" placeholder="Draft it in your own words, then say it out loud and time yourself.">${esc(a)}</textarea>
+              <div class="q-foot"><span id="words-${q.id}">${a.trim() ? a.trim().split(/\s+/).length + ' words · about ' + Math.max(1, Math.round(a.trim().split(/\s+/).length / 140)) + ' min spoken' : 'Aim for 250–350 words, about 2 minutes'}</span><span class="ok" id="saved-${q.id}"></span></div>
+            </div>
+          </div>` : ''}
+        </div>`;
+      }).join('');
+
+      document.querySelectorAll('[data-q]').forEach(b => b.addEventListener('click', () => {
+        open = open === b.dataset.q ? null : b.dataset.q;
+        renderList();
+        if (open) { const ta = document.getElementById('ans-' + open); if (ta) ta.focus(); }
+      }));
+
+      let t;
+      document.querySelectorAll('[data-ans]').forEach(ta => ta.addEventListener('input', () => {
+        const id = ta.dataset.ans;
+        answers[id] = ta.value;
+        const w = ta.value.trim() ? ta.value.trim().split(/\s+/).length : 0;
+        const wEl = document.getElementById('words-' + id);
+        if (wEl) wEl.textContent = w ? `${w} words · about ${Math.max(1, Math.round(w / 140))} min spoken` : 'Aim for 250–350 words, about 2 minutes';
+        clearTimeout(t);
+        t = setTimeout(() => {
+          progress = MMApp.setProgress(user, { interviewAnswers: answers });
+          const s = document.getElementById('saved-' + id);
+          if (s) { s.textContent = 'Saved'; setTimeout(() => { s.textContent = ''; }, 1500); }
+          renderStats();
+        }, 500);
+      }));
+      renderStats();
+    }
+
+    renderList();
+    if (location.hash === '#bank') showTab('bank');
+  }
+</script>
+</body>
+</html>
