@@ -75,7 +75,8 @@ const MMApp = (() => {
                     { key: 'internship-cv', href: 'internship-cv.html', icon: '📄', label: 'CV & Cover Letter' },
                     { key: 'internship-tests', href: 'internship-tests.html', icon: '⏱', label: 'Online Assessments' },
                     { key: 'internship-companies', href: 'internship-companies.html', icon: '🏦', label: 'Companies & Tracker' },
-                    { key: 'internship-interviews', href: 'internship-interviews.html', icon: '🎤', label: 'Interview Prep' }
+                    { key: 'internship-interviews', href: 'internship-interviews.html', icon: '🎤', label: 'Interview Prep' },
+                    { key: 'internship-networking', href: 'internship-networking.html', icon: '🌍', label: 'Networking & News' }
                       ];
 
                  function renderSidebar(activeKey) {

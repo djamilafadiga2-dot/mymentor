@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Networking &amp; Commercial Awareness · MyMentor</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/theme.css" />
+<style>
+  .pg-section { margin-top: 34px; }
+  .pg-section h2 { font-size: 22px; padding-bottom: 12px; margin-bottom: 18px; border-bottom: 2px solid var(--ink-100); }
+  .pg-section h3 { font-size: 17px; color: var(--brand-700); margin-top: 26px; margin-bottom: 12px; }
+  .pg-section h4 { font-size: 14.5px; font-weight: 700; color: var(--ink-950); margin-bottom: 6px; }
+  .pg-section p { color: var(--ink); margin-bottom: 13px; line-height: 1.7; font-size: 14.5px; }
+  .pg-section ul, .pg-section ol { margin: 0 0 16px 22px; }
+  .pg-section li { color: var(--ink); margin-bottom: 7px; line-height: 1.6; font-size: 14.5px; }
+  .pg-section strong { color: var(--ink-950); font-weight: 700; }
+  .pg-section em { color: var(--muted); }
+
+  .pg-box { border-radius: var(--radius-md); padding: 18px 20px; margin: 16px 0; }
+  .pg-box p:last-child, .pg-box ul:last-child, .pg-box ol:last-child { margin-bottom: 0; }
+  .pg-weak { background: var(--warn-bg); border-left: 4px solid var(--warn); }
+  .pg-strong { background: var(--ok-bg); border-left: 4px solid var(--ok); }
+  .pg-highlight { background: var(--brand-100); border: 1.5px solid var(--brand-500); }
+
+  .pg-table { width: 100%; border-collapse: collapse; font-size: 14px; margin: 8px 0 18px; background: var(--paper); border-radius: var(--radius-md); overflow: hidden; border: 1px solid var(--line); }
+  .pg-table th { text-align: left; background: var(--ink-050); color: var(--ink-950); font-weight: 700; padding: 11px 14px; border-bottom: 1px solid var(--line); font-size: 13px; }
+  .pg-table td { padding: 11px 14px; border-bottom: 1px solid var(--line); vertical-align: top; line-height: 1.55; }
+  .pg-table tr:last-child td { border-bottom: none; }
+  .table-wrap { overflow-x: auto; }
+
+  .ic-tabs { display: flex; gap: 8px; margin-top: 20px; border-bottom: 2px solid var(--ink-100); flex-wrap: wrap; }
+  .ic-tab-btn {
+    padding: 12px 4px; margin-right: 22px; font-size: 14.5px; font-weight: 700; color: var(--muted);
+    background: none; border: none; border-bottom: 2px solid transparent; margin-bottom: -2px; cursor: pointer;
+  }
+  .ic-tab-btn.active { color: var(--brand-700); border-bottom-color: var(--brand-600); }
+  .ic-tabpanel[hidden], [hidden] { display: none !important; }
+
+  .msg {
+    background: var(--paper); border: 1px solid var(--line-strong); border-radius: var(--radius-md);
+    padding: 18px 20px; margin: 12px 0 18px; font-size: 14px; line-height: 1.65; color: var(--ink);
+  }
+  .msg .subject { font-weight: 700; color: var(--ink-950); margin-bottom: 8px; }
+  .msg p { margin-bottom: 10px !important; font-size: 14px !important; }
+  .msg p:last-child { margin-bottom: 0 !important; }
+  .msg mark { background: #fff3cd; padding: 0 3px; border-radius: 3px; }
+
+  .steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin: 10px 0 18px; }
+  .steps div { background: var(--paper); border: 1px solid var(--line); border-radius: var(--radius-md); padding: 16px 18px; }
+  .steps b { display: block; font-size: 11.5px; letter-spacing: .05em; text-transform: uppercase; color: var(--brand-700); }
+  .steps strong { display: block; font-size: 14.5px; color: var(--ink-950); margin-top: 6px; }
+  .steps p { font-size: 13px !important; color: var(--muted) !important; margin: 4px 0 0 !important; line-height: 1.5 !important; }
+
+  .src-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-top: 8px; }
+  .src-card { background: var(--paper); border: 1px solid var(--line); border-radius: var(--radius-lg); padding: 20px 22px; }
+  .src-card h4 { font-family: var(--font-display); font-size: 17px; color: var(--ink-950); }
+  .src-card .meta { display: flex; gap: 6px; flex-wrap: wrap; margin: 8px 0 10px; }
+  .src-card p { font-size: 13.5px !important; color: var(--ink) !important; margin: 0 0 12px !important; line-height: 1.55 !important; }
+  .src-card .btn { align-self: flex-start; }
+
+  /* News log */
+  .form-card { background: var(--paper); border: 1px solid var(--line); border-radius: var(--radius-lg); padding: 22px 24px; margin-top: 18px; }
+  .form-card h3 { font-size: 17px; margin: 0 0 14px; color: var(--ink-950); }
+  .form-grid { display: grid; grid-template-columns: 160px 1fr 1fr; gap: 14px; }
+  .form-grid .wide { grid-column: span 3; }
+  .field label { display: block; font-size: 12.5px; font-weight: 700; color: var(--ink-800); margin-bottom: 6px; }
+  .field input, .field textarea {
+    width: 100%; padding: 10px 12px; border-radius: var(--radius-sm); border: 1.5px solid var(--line-strong);
+    background: var(--canvas); color: var(--ink); font-size: 14px; font-family: inherit;
+  }
+  .field textarea { min-height: 70px; resize: vertical; line-height: 1.5; }
+  .field input:focus, .field textarea:focus { outline: none; border-color: var(--brand-500); }
+  .form-actions { display: flex; gap: 10px; align-items: center; margin-top: 16px; flex-wrap: wrap; }
+
+  .log-item { background: var(--paper); border: 1px solid var(--line); border-radius: var(--radius-md); padding: 14px 18px; margin-top: 10px; display: flex; gap: 16px; align-items: flex-start; }
+  .log-date { font-size: 12px; font-weight: 700; color: var(--brand-700); white-space: nowrap; padding-top: 2px; width: 84px; flex-shrink: 0; }
+  .log-body { flex: 1; }
+  .log-body .t { font-size: 14.5px; font-weight: 600; color: var(--ink-950); line-height: 1.45; }
+  .log-body .w { font-size: 13.5px; color: var(--muted); margin-top: 4px; line-height: 1.55; }
+  .link-btn { background: none; border: none; color: var(--muted); font-size: 12.5px; font-weight: 600; cursor: pointer; text-decoration: underline; padding: 0; }
+  .link-btn:hover { color: var(--ink-950); }
+  .empty { background: var(--paper); border: 1.5px dashed var(--line-strong); border-radius: var(--radius-lg); padding: 26px; text-align: center; color: var(--muted); margin-top: 16px; font-size: 14px; }
+
+  .sources { margin-top: 36px; font-size: 12.5px; color: var(--muted); }
+  .sources a { color: var(--ink-700); text-decoration: underline; }
+  .sources li { margin: 0 0 4px 18px; }
+
+  .pg-nav { display: flex; justify-content: space-between; margin-top: 40px; gap: 12px; flex-wrap: wrap; }
+
+  @media (max-width: 980px) {
+    .steps, .src-grid { grid-template-columns: 1fr; }
+    .form-grid { grid-template-columns: 1fr; }
+    .form-grid .wide { grid-column: span 1; }
+  }
+</style>
+</head>
+<body>
+
+<div class="app-shell">
+  <nav class="sidebar" id="mm-sidebar"></nav>
+
+  <main class="main">
+    <div class="page-eyebrow">Internships · Step 5</div>
+    <h1 class="page-title">Networking &amp; Commercial Awareness</h1>
+    <p class="page-sub">How to meet people in the industry, keep up with the markets, and turn a spring week into a summer internship offer.</p>
+
+    <div class="ic-tabs">
+      <button type="button" class="ic-tab-btn active" data-tab="network">Networking</button>
+      <button type="button" class="ic-tab-btn" data-tab="markets">Commercial awareness</button>
+      <button type="button" class="ic-tab-btn" data-tab="during">During the spring week</button>
+    </div>
+
+    <!-- ============================== NETWORKING ============================== -->
+    <div class="ic-tabpanel" id="tab-network">
+      <div class="pg-section">
+        <h2>Why bother</h2>
+        <p>Talking to people who already do the job gives you the one thing applications need most: <strong>specific detail</strong>. A sentence like "an analyst in the industrials team told me…" cannot be copied from a website, and it is what makes a "why this firm" answer convincing. It also tells you whether you actually want the job.</p>
+        <p>You are not asking anyone for a job. You are asking for <strong>fifteen minutes of their time</strong> to hear about their work. Most people say yes to that, because someone did it for them.</p>
+
+        <h3>Your LinkedIn profile first</h3>
+        <p>Before you message anyone, make your profile worth clicking on:</p>
+        <ul>
+          <li><strong>A clear photo</strong>: plain background, smart clothes, looking at the camera.</li>
+          <li><strong>Headline</strong>: what you are and what you're interested in. "Student at Lycée Sainte-Marie | Interested in finance and markets" beats "Student".</li>
+          <li><strong>About</strong>: three or four sentences on what you study, what you've done, and what you want to explore.</li>
+          <li><strong>Experience and activities</strong>: the same entries as your CV, so the two match.</li>
+          <li><strong>Post occasionally</strong>: a short write-up of a project, an event you attended, or something you learned. One good post a month is plenty.</li>
+        </ul>
+
+        <h3>Finding the right people</h3>
+        <div class="steps">
+          <div><b>Step 1</b><strong>Search</strong><p>On LinkedIn, search the firm and filter by school, city or role (analyst, spring intern).</p></div>
+          <div><b>Step 2</b><strong>Look for a link</strong><p>Same school, same country, same club, same degree. A shared link doubles your reply rate.</p></div>
+          <div><b>Step 3</b><strong>Start junior</strong><p>Analysts and recent spring interns reply most and remember the process best.</p></div>
+          <div><b>Step 4</b><strong>Keep a record</strong><p>Save who you spoke to and what they said in that firm's company profile in Step 3.</p></div>
+        </div>
+        <p>Also use what already exists: <strong>insight events and webinars</strong> run by the banks, alumni from your school, and your MyMentor mentor, who can often introduce you directly.</p>
+
+        <h3>The message</h3>
+        <p>Short, specific, easy to say yes to. Never attach your CV to a first message.</p>
+        <div class="msg">
+          <div class="subject">Subject: Question from a student in Abidjan interested in <mark>[division]</mark></div>
+          <p>Hello <mark>[name]</mark>,</p>
+          <p>I'm a student at <mark>[school]</mark> in Abidjan, hoping to study in the UK and work in finance. I saw that you <mark>[something specific and true: studied at the same school / work in the industrials team / joined through a spring week]</mark>.</p>
+          <p>I co-founded our school's investment club and I've been following <mark>[firm or sector]</mark> since <mark>[specific reason]</mark>. I'd really like to understand what the work is actually like day to day.</p>
+          <p>Would you have 15 minutes in the next few weeks for a short call? I'm happy to fit around your schedule.</p>
+          <p>Thank you for your time,<br><mark>[your name]</mark></p>
+        </div>
+        <div class="pg-box pg-weak">
+          <h4>What not to send</h4>
+          <ul>
+            <li>"Hi, can you refer me for a spring week?" — asking for a favour before a conversation.</li>
+            <li>A long message about yourself with no question in it.</li>
+            <li>The identical message to twenty people. People at the same firm talk to each other.</li>
+            <li>Messaging again after two attempts. One follow-up after 7–10 days is polite; more is not.</li>
+          </ul>
+        </div>
+
+        <h3>On the call</h3>
+        <ul>
+          <li>Have <strong>four or five questions</strong> ready and keep to the time you asked for. End it yourself at 15 minutes; they will usually carry on if they want to.</li>
+          <li>Ask about <strong>their experience</strong>, not for things you could look up: how they chose the division, what surprised them, what a normal day looks like, what they'd do differently.</li>
+          <li>Take notes, and write them into the firm's profile in Step 3 the same day.</li>
+          <li><strong>Send a thank-you message within 24 hours</strong>, naming one thing you took from the conversation.</li>
+          <li>Send a short update months later when you apply. That is what turns a contact into a supporter.</li>
+        </ul>
+      </div>
+
+      <div class="pg-nav">
+        <a class="btn btn-ghost btn-sm" href="internship-interviews.html">← Step 4: Interview Prep</a>
+        <button type="button" class="btn btn-primary btn-sm" data-goto="markets">Commercial awareness →</button>
+      </div>
+    </div>
+
+    <!-- ============================== MARKETS ============================== -->
+    <div class="ic-tabpanel" id="tab-markets" hidden>
+      <div class="pg-section">
+        <h2>Commercial awareness</h2>
+        <p>Commercial awareness means being able to talk about something happening in business right now, and say why it matters. Interviewers ask for it in one question: <em>"Tell me about a deal or market story you've been following."</em> You cannot revise for that the night before, but fifteen minutes a day for a few months is more than enough.</p>
+
+        <h3>A routine that works</h3>
+        <div class="steps">
+          <div><b>Daily · 10 min</b><strong>Headlines</strong><p>Read the business headlines. You only need to know what happened.</p></div>
+          <div><b>Weekly · 30 min</b><strong>One story in depth</strong><p>Pick one story and read two articles about it, ideally with different views.</p></div>
+          <div><b>Weekly · 10 min</b><strong>Write it down</strong><p>Log it below: what happened, and why it matters. Three sentences.</p></div>
+          <div><b>Monthly</b><strong>Say it out loud</strong><p>Explain your best story to someone in 60 seconds without notes.</p></div>
+        </div>
+        <div class="pg-box pg-highlight">
+          <p><strong>Depth beats breadth.</strong> Three stories you can discuss properly are worth far more than thirty headlines you half-remember. Follow one deal or one theme over several weeks, so you can talk about what happened next.</p>
+        </div>
+
+        <h3>Where to read</h3>
+        <div class="src-grid">
+          <div class="src-card">
+            <h4>BBC Business &amp; Reuters</h4>
+            <div class="meta"><span class="pill pill-done">Free</span></div>
+            <p>Reliable daily headlines with no paywall. Enough for the 10-minute habit.</p>
+            <a class="btn btn-ghost btn-sm" href="https://www.reuters.com/business/" target="_blank" rel="noopener">Reuters Business →</a>
+          </div>
+          <div class="src-card">
+            <h4>Financial Times</h4>
+            <div class="meta"><span class="pill pill-warn">Paid</span><span class="pill pill-todo">Often free at university</span></div>
+            <p>The standard for UK finance. Many universities give students full access through the library, and the FT also sells a discounted student subscription. Its free "FT News Briefing" podcast is a good daily start.</p>
+            <a class="btn btn-ghost btn-sm" href="https://www.ft.com/" target="_blank" rel="noopener">ft.com →</a>
+          </div>
+          <div class="src-card">
+            <h4>Money Stuff, by Matt Levine</h4>
+            <div class="meta"><span class="pill pill-done">Free by email</span></div>
+            <p>A daily Bloomberg newsletter explaining what happened in finance, in plain English and with jokes. The fastest way to learn how the industry actually thinks.</p>
+            <a class="btn btn-ghost btn-sm" href="https://www.bloomberg.com/account/newsletters/money-stuff" target="_blank" rel="noopener">Subscribe →</a>
+          </div>
+          <div class="src-card">
+            <h4>Bank research and podcasts</h4>
+            <div class="meta"><span class="pill pill-done">Free</span></div>
+            <p>Most banks publish free research summaries and podcasts, such as Goldman Sachs Exchanges. Listening to a firm's own podcast is also excellent "why this firm" material.</p>
+            <a class="btn btn-ghost btn-sm" href="https://www.goldmansachs.com/insights/goldman-sachs-exchanges" target="_blank" rel="noopener">GS Exchanges →</a>
+          </div>
+        </div>
+        <p class="small muted">Local matters too: follow the BRVM and West African business news. A student who can compare a London listing with an Abidjan one is far more memorable than one who repeats the same headline as everyone else.</p>
+
+        <h3>How to talk about a story</h3>
+        <div class="pg-box pg-strong">
+          <p><strong>What happened.</strong> "Last month Company A agreed to buy Company B for about £3bn, mostly in shares."</p>
+          <p><strong>Why they did it.</strong> "A wants B's distribution network in Asia, where A has almost no presence."</p>
+          <p><strong>What you think.</strong> "It looks expensive against what similar companies have sold for, so it only works if the cost savings they promised are real. I'd want to see the first results after the deal closes."</p>
+          <p><strong>Why it matters to the bank.</strong> "It also shows deal activity coming back in the sector, which is good for advisory teams like yours."</p>
+        </div>
+        <p>Having a view matters more than having the right view. Say what you think and why, and be willing to be argued with.</p>
+
+        <h3>My news log</h3>
+        <p>Keep your stories here. Bring your three best ones to every interview.</p>
+
+        <div class="form-card">
+          <form id="nl-form" autocomplete="off">
+            <div class="form-grid">
+              <div class="field"><label for="nl-date">Date</label><input id="nl-date" type="date" required /></div>
+              <div class="field" style="grid-column: span 2;"><label for="nl-title">The story</label><input id="nl-title" required placeholder="e.g. Company A buys Company B for £3bn" /></div>
+              <div class="field wide"><label for="nl-why">Why it matters, and what I think</label><textarea id="nl-why" placeholder="Two or three sentences in your own words."></textarea></div>
+            </div>
+            <div class="form-actions"><button type="submit" class="btn btn-primary btn-sm">Add to my log</button></div>
+          </form>
+        </div>
+        <div id="nl-list"></div>
+      </div>
+
+      <div class="pg-nav">
+        <button type="button" class="btn btn-ghost btn-sm" data-goto="network">← Networking</button>
+        <button type="button" class="btn btn-primary btn-sm" data-goto="during">During the spring week →</button>
+      </div>
+    </div>
+
+    <!-- ============================== DURING ============================== -->
+    <div class="ic-tabpanel" id="tab-during" hidden>
+      <div class="pg-section">
+        <h2>During the spring week</h2>
+        <p>A spring week is not a holiday with free lunches. At most firms it is the first round of the summer internship process: the people running it decide who gets fast-tracked. Everything below is about being someone they remember for the right reasons.</p>
+
+        <h3>Before it starts</h3>
+        <ul>
+          <li>Reread the firm's company profile in Step 3, and check the news from the last month.</li>
+          <li>Prepare your introduction: who you are, what you study, why you're here. You will say it twenty times.</li>
+          <li>Write down five questions you genuinely want answered during the week.</li>
+          <li>Check the dress code, the address and your travel. Arrive ten minutes early every day.</li>
+        </ul>
+
+        <h3>During the week</h3>
+        <div class="table-wrap">
+          <table class="pg-table">
+            <thead><tr><th style="width:34%">Do</th><th>Why</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Ask questions in every session</strong></td><td>Speakers report back on who engaged. One thoughtful question a session is the right amount: dominating is worse than silence.</td></tr>
+              <tr><td><strong>Take notes and use names</strong></td><td>Write down who you met and what they said, the same day. Using someone's name on day three is remembered.</td></tr>
+              <tr><td><strong>Be kind to everyone</strong></td><td>Recruiters, assistants and current interns are all asked what they thought of you.</td></tr>
+              <tr><td><strong>Help your group</strong></td><td>In group tasks, the person who organises the work and brings quiet people in scores better than the loudest.</td></tr>
+              <tr><td><strong>Put the phone away</strong></td><td>It is the single most common complaint about spring interns.</td></tr>
+              <tr><td><strong>Be careful at social events</strong></td><td>Drinks are still part of the assessment. Have a soft drink and enjoy the conversation.</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>Afterwards</h3>
+        <ol>
+          <li><strong>Within 24 hours:</strong> thank the people who hosted you, by email or LinkedIn, mentioning something specific from the week.</li>
+          <li><strong>Within a week:</strong> write up what you learned about each division, and which one you now want. This is the raw material for your summer internship application.</li>
+          <li><strong>Apply early for the summer internship.</strong> If you are offered a fast-track, take it and prepare properly: it is a real interview.</li>
+          <li><strong>Stay in touch:</strong> a short message twice a year is enough to be remembered.</li>
+        </ol>
+
+        <div class="pg-box pg-highlight">
+          <p><strong>If it doesn't lead to an offer</strong>, you still have a week inside the industry, several contacts and much better answers for the next application. Most people apply more than once. Ask for feedback, use it, and apply again.</p>
+        </div>
+      </div>
+
+      <div class="pg-nav">
+        <button type="button" class="btn btn-ghost btn-sm" data-goto="markets">← Commercial awareness</button>
+        <a class="btn btn-primary btn-sm" href="internships.html">Back to the Hub →</a>
+      </div>
+    </div>
+  </main>
+</div>
+
+<script src="assets/js/app.js"></script>
+<script>
+  const user = MMApp.requireUser();
+  const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+
+  const tabBtns = document.querySelectorAll('.ic-tab-btn');
+  const panels = {
+    network: document.getElementById('tab-network'),
+    markets: document.getElementById('tab-markets'),
+    during: document.getElementById('tab-during')
+  };
+  function showTab(key) {
+    tabBtns.forEach(b => b.classList.toggle('active', b.dataset.tab === key));
+    Object.entries(panels).forEach(([k, p]) => { p.hidden = k !== key; });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+  tabBtns.forEach(b => b.addEventListener('click', () => showTab(b.dataset.tab)));
+  document.querySelectorAll('[data-goto]').forEach(b => b.addEventListener('click', () => showTab(b.dataset.goto)));
+
+  if (user) {
+    MMApp.renderSidebar('internship-networking');
+    let progress = MMApp.getProgress(user);
+    let log = progress.newsLog || [];
+    const F = id => document.getElementById(id);
+    F('nl-date').value = new Date().toISOString().slice(0, 10);
+
+    function render() {
+      const box = F('nl-list');
+      if (!log.length) {
+        box.innerHTML = '<div class="empty">Nothing logged yet. Add one story a week and you will have a dozen by the time you apply.</div>';
+        return;
+      }
+      box.innerHTML = [...log].sort((a, b) => b.date.localeCompare(a.date)).map(e => `
+        <div class="log-item">
+          <div class="log-date">${new Date(e.date + 'T00:00:00').toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })}</div>
+          <div class="log-body"><div class="t">${esc(e.title)}</div>${e.why ? `<div class="w">${esc(e.why)}</div>` : ''}</div>
+          <button type="button" class="link-btn" data-del="${e.id}">Remove</button>
+        </div>`).join('');
+      box.querySelectorAll('[data-del]').forEach(b => b.addEventListener('click', () => {
+        log = log.filter(x => x.id !== b.dataset.del);
+        progress = MMApp.setProgress(user, { newsLog: log });
+        render();
+      }));
+    }
+
+    F('nl-form').addEventListener('submit', e => {
+      e.preventDefault();
+      const title = F('nl-title').value.trim();
+      if (!title) return;
+      log.push({ id: 'n' + Date.now().toString(36), date: F('nl-date').value || new Date().toISOString().slice(0, 10), title, why: F('nl-why').value.trim() });
+      progress = MMApp.setProgress(user, { newsLog: log });
+      F('nl-title').value = ''; F('nl-why').value = '';
+      render();
+    });
+
+    render();
+  }
+</script>
+</body>
+</html>
