@@ -97,10 +97,11 @@
       href: 'internship-tests.html'
     },
     {
-      num: 3, live: false,
+      num: 3, live: true,
       title: 'Companies & Application Tracker',
       desc: 'Track every application, and build a profile for each firm: values, culture, divisions and what to mention in your answers.',
-      tags: ['UK finance tracker', 'Application tracker', 'Company profiles']
+      tags: ['Trackr links', 'My applications', '8 bank profiles', 'Add your own companies'],
+      href: 'internship-companies.html'
     },
     {
       num: 4, live: false,
@@ -124,7 +125,7 @@
       let cta = '';
       if (s.live) {
         pill = '<span class="pill pill-done">Available</span>';
-        cta = `<a class="btn btn-primary btn-sm" href="${s.href}">Open guide →</a>`;
+        cta = `<a class="btn btn-primary btn-sm" href="${s.href}">Open →</a>`;
       }
       return `
         <div class="ih-step ${s.live ? 'live' : 'soon'}">

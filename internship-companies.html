@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Companies & Tracker · MyMentor</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/theme.css" />
+<style>
+  .pg-section { margin-top: 30px; }
+  .pg-section h2 { font-size: 22px; padding-bottom: 12px; margin-bottom: 18px; border-bottom: 2px solid var(--ink-100); }
+  .pg-section h3 { font-size: 17px; color: var(--brand-700); margin-top: 24px; margin-bottom: 10px; }
+  .pg-section p { color: var(--ink); margin-bottom: 13px; line-height: 1.7; font-size: 14.5px; }
+  .pg-section ul, .pg-section ol { margin: 0 0 16px 22px; }
+  .pg-section li { color: var(--ink); margin-bottom: 7px; line-height: 1.6; font-size: 14.5px; }
+  .pg-section strong { color: var(--ink-950); }
+  .pg-box { border-radius: var(--radius-md); padding: 18px 20px; margin: 16px 0; }
+  .pg-box p:last-child, .pg-box ol:last-child, .pg-box ul:last-child { margin-bottom: 0; }
+  .pg-highlight { background: var(--brand-100); border: 1.5px solid var(--brand-500); }
+
+  .ic-tabs { display: flex; gap: 8px; margin-top: 20px; border-bottom: 2px solid var(--ink-100); flex-wrap: wrap; }
+  .ic-tab-btn {
+    padding: 12px 4px; margin-right: 22px; font-size: 14.5px; font-weight: 700; color: var(--muted);
+    background: none; border: none; border-bottom: 2px solid transparent; margin-bottom: -2px; cursor: pointer;
+  }
+  .ic-tab-btn.active { color: var(--brand-700); border-bottom-color: var(--brand-600); }
+  .ic-tabpanel[hidden], [hidden] { display: none !important; }
+
+  /* Trackr cards */
+  .link-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 8px; }
+  .link-card { background: var(--paper); border: 1px solid var(--line); border-radius: var(--radius-lg); padding: 20px 22px; display: flex; flex-direction: column; }
+  .link-card h4 { font-family: var(--font-display); font-size: 17px; color: var(--ink-950); }
+  .link-card p { font-size: 13.5px !important; color: var(--muted) !important; margin: 6px 0 14px !important; line-height: 1.55 !important; flex: 1; }
+  .link-card .btn { align-self: flex-start; }
+
+  /* Tracker */
+  .stat-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 20px; }
+  .stat { background: var(--paper); border: 1px solid var(--line); border-radius: var(--radius-md); padding: 12px 16px; min-width: 110px; }
+  .stat .n { font-family: var(--font-display); font-size: 24px; color: var(--ink-950); }
+  .stat .l { font-size: 12px; color: var(--muted); font-weight: 600; }
+
+  .form-card { background: var(--paper); border: 1px solid var(--line); border-radius: var(--radius-lg); padding: 22px 24px; margin-top: 20px; }
+  .form-card h3 { font-size: 17px; margin-bottom: 14px; }
+  .form-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+  .form-grid .wide { grid-column: span 3; }
+  .field label { display: block; font-size: 12.5px; font-weight: 700; color: var(--ink-800); margin-bottom: 6px; }
+  .field input, .field select, .field textarea {
+    width: 100%; padding: 10px 12px; border-radius: var(--radius-sm); border: 1.5px solid var(--line-strong);
+    background: var(--canvas); color: var(--ink); font-size: 14px;
+  }
+  .field textarea { min-height: 80px; resize: vertical; line-height: 1.5; }
+  .field input:focus, .field select:focus, .field textarea:focus { outline: none; border-color: var(--brand-500); }
+  .form-actions { display: flex; gap: 10px; align-items: center; margin-top: 16px; flex-wrap: wrap; }
+  .saved-note { font-size: 12.5px; color: var(--ok); font-weight: 600; }
+
+  .tr-table { width: 100%; border-collapse: collapse; font-size: 13.5px; background: var(--paper); border: 1px solid var(--line); border-radius: var(--radius-md); overflow: hidden; }
+  .tr-table th { text-align: left; background: var(--ink-050); color: var(--ink-950); font-weight: 700; padding: 10px 12px; border-bottom: 1px solid var(--line); font-size: 12.5px; white-space: nowrap; }
+  .tr-table td { padding: 10px 12px; border-bottom: 1px solid var(--line); vertical-align: top; line-height: 1.5; }
+  .tr-table tr:last-child td { border-bottom: none; }
+  .tr-table select { padding: 5px 8px; border-radius: 999px; border: 1px solid var(--line-strong); font-size: 12.5px; font-weight: 600; background: var(--paper); }
+  .tr-table .due-soon { color: var(--warn); font-weight: 700; }
+  .tr-table .past { color: var(--muted-2); text-decoration: line-through; }
+  .link-btn { background: none; border: none; color: var(--muted); font-size: 12.5px; font-weight: 600; cursor: pointer; text-decoration: underline; padding: 0; }
+  .link-btn:hover { color: var(--ink-950); }
+  .table-wrap { overflow-x: auto; margin-top: 20px; }
+  .empty { background: var(--paper); border: 1.5px dashed var(--line-strong); border-radius: var(--radius-lg); padding: 28px; text-align: center; color: var(--muted); margin-top: 20px; font-size: 14px; }
+
+  .st-researching { background: var(--ink-100); color: var(--ink-700); }
+  .st-applied { background: var(--brand-100); color: var(--brand-700); }
+  .st-progress { background: var(--warn-bg); color: var(--warn); }
+  .st-offer { background: var(--ok-bg); color: var(--ok); }
+  .st-closed { background: #f3f3f6; color: var(--muted-2); }
+
+  /* Company grid */
+  .co-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-top: 20px; }
+  .co-card {
+    text-align: left; background: var(--paper); border: 1px solid var(--line); border-radius: var(--radius-lg);
+    padding: 18px 20px; cursor: pointer; transition: border-color .15s ease, box-shadow .15s ease; font: inherit;
+    display: flex; flex-direction: column; gap: 6px;
+  }
+  .co-card:hover { border-color: var(--brand-600); box-shadow: var(--shadow-md); }
+  .co-card:focus-visible { outline: 2px solid var(--brand-600); outline-offset: 2px; }
+  .co-card .nm { font-family: var(--font-display); font-size: 17px; font-weight: 600; color: var(--ink-950); }
+  .co-card .ty { font-size: 12.5px; color: var(--muted); }
+  .co-card .op { font-size: 12px; font-weight: 700; color: var(--brand-700); margin-top: auto; padding-top: 8px; }
+  .co-card .nt { font-size: 11.5px; font-weight: 600; color: var(--ok); }
+  .co-card.custom { border-style: dashed; }
+  .co-card.add { align-items: center; justify-content: center; border-style: dashed; color: var(--brand-700); font-weight: 700; font-size: 14px; min-height: 120px; background: var(--canvas); }
+
+  /* Company detail */
+  .co-back { margin-top: 20px; }
+  .co-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; flex-wrap: wrap; margin-top: 16px; }
+  .co-head h2 { font-size: 28px; border: none; padding: 0; margin: 0; }
+  .co-head .ty { color: var(--muted); font-size: 14px; margin-top: 4px; }
+  .co-layout { display: grid; grid-template-columns: 1.4fr 1fr; gap: 20px; margin-top: 20px; align-items: start; }
+  .co-block { background: var(--paper); border: 1px solid var(--line); border-radius: var(--radius-lg); padding: 20px 22px; }
+  .co-block + .co-block { margin-top: 16px; }
+  .co-block h4 { font-size: 12px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--brand-700); margin-bottom: 10px; font-family: var(--font-body); }
+  .co-block p, .co-block li { font-size: 14px; line-height: 1.6; color: var(--ink); }
+  .co-block ul { margin-left: 18px; }
+  .co-block li { margin-bottom: 5px; }
+  .kv { display: grid; grid-template-columns: 110px 1fr; gap: 8px 14px; font-size: 14px; line-height: 1.55; }
+  .kv dt { font-weight: 700; color: var(--ink-950); font-size: 13px; }
+  .kv dd { color: var(--ink); }
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; }
+  .chip { background: var(--ink-050); border: 1px solid var(--line); border-radius: 999px; padding: 5px 11px; font-size: 13px; font-weight: 600; color: var(--ink-800); }
+  .src { font-size: 12px; color: var(--muted); margin-top: 10px; }
+  .src a { text-decoration: underline; }
+  .notes-block { background: var(--brand-100); border-color: #cdd7fb; position: sticky; top: 20px; }
+  .notes-block .field + .field { margin-top: 12px; }
+  .notes-block textarea { background: var(--paper); min-height: 70px; }
+
+  .sources { margin-top: 30px; font-size: 12.5px; color: var(--muted); }
+  .sources a { color: var(--ink-700); text-decoration: underline; }
+  .sources li { margin: 0 0 4px 18px; }
+
+  .pg-nav { display: flex; justify-content: space-between; margin-top: 40px; gap: 12px; flex-wrap: wrap; }
+
+  @media (max-width: 980px) {
+    .link-grid, .form-grid, .co-layout { grid-template-columns: 1fr; }
+    .form-grid .wide { grid-column: span 1; }
+    .co-grid { grid-template-columns: 1fr 1fr; }
+    .notes-block { position: static; }
+  }
+</style>
+</head>
+<body>
+
+<div class="app-shell">
+  <nav class="sidebar" id="mm-sidebar"></nav>
+
+  <main class="main">
+    <div class="page-eyebrow">Internships · Step 3</div>
+    <h1 class="page-title">Companies &amp; Tracker</h1>
+    <p class="page-sub">Find the programmes, track every application, and build a profile for each firm, the same way you research universities.</p>
+
+    <div class="ic-tabs">
+      <button type="button" class="ic-tab-btn active" data-tab="find">Find opportunities</button>
+      <button type="button" class="ic-tab-btn" data-tab="tracker">My applications</button>
+      <button type="button" class="ic-tab-btn" data-tab="profiles">Company profiles</button>
+    </div>
+
+    <!-- ============================== FIND ============================== -->
+    <div class="ic-tabpanel" id="tab-find">
+      <div class="pg-section">
+        <h2>Where to find programmes</h2>
+        <p><strong>Trackr</strong> is the UK finance application tracker most students use. It lists every spring week, internship and insight programme, with when it opens and closes. It is free.</p>
+        <div class="link-grid">
+          <div class="link-card">
+            <h4>Pre-university programmes</h4>
+            <p>Insight days, work experience and online programmes open to school students. Start here now.</p>
+            <a class="btn btn-primary btn-sm" href="https://app.the-trackr.com/uk-finance/pre-university" target="_blank" rel="noopener">Open Trackr: Pre-Uni →</a>
+          </div>
+          <div class="link-card">
+            <h4>Spring weeks</h4>
+            <p>Every UK finance spring week, with opening dates and deadlines. You'll use this in your first year at university.</p>
+            <a class="btn btn-primary btn-sm" href="https://app.the-trackr.com/uk-finance/spring-weeks" target="_blank" rel="noopener">Open Trackr: Spring Weeks →</a>
+          </div>
+          <div class="link-card">
+            <h4>Spring week timeline</h4>
+            <p>When each firm opened applications last year, so you know when to expect this year's.</p>
+            <a class="btn btn-ghost btn-sm" href="https://the-trackr.com/blog/spring-week-timeline-2027-when-uk-finance-firms-open-applications/" target="_blank" rel="noopener">Read the timeline →</a>
+          </div>
+        </div>
+
+        <h3>How to use it</h3>
+        <ol>
+          <li>Create a free account and turn on alerts, so you're told the day a programme opens.</li>
+          <li>Pick <strong>8–15 firms</strong> to target. Quality beats quantity: each application needs its own research.</li>
+          <li>Add each one to <strong>My applications</strong> (next tab) with its deadline.</li>
+          <li>Build a <strong>company profile</strong> for each firm before you write the application.</li>
+        </ol>
+
+        <div class="pg-box pg-highlight">
+          <p><strong>Apply early.</strong> Many firms review applications as they arrive and close once they have enough candidates, sometimes before the official deadline. Aim to apply within 1–2 weeks of a programme opening.</p>
+        </div>
+      </div>
+
+      <div class="pg-nav">
+        <a class="btn btn-ghost btn-sm" href="internship-tests.html">← Step 2: Online Assessments</a>
+        <button type="button" class="btn btn-primary btn-sm" data-goto="tracker">My applications →</button>
+      </div>
+    </div>
+
+    <!-- ============================== TRACKER ============================== -->
+    <div class="ic-tabpanel" id="tab-tracker" hidden>
+      <div class="stat-row" id="tr-stats"></div>
+
+      <div class="form-card">
+        <h3 id="tr-form-title">Add an application</h3>
+        <form id="tr-form" autocomplete="off">
+          <div class="form-grid">
+            <div class="field"><label for="tr-company">Company</label><input id="tr-company" list="tr-company-list" required placeholder="e.g. Morgan Stanley" /><datalist id="tr-company-list"></datalist></div>
+            <div class="field"><label for="tr-programme">Programme</label><input id="tr-programme" placeholder="e.g. Spring Insight Programme" /></div>
+            <div class="field"><label for="tr-division">Division</label><input id="tr-division" placeholder="e.g. Investment Banking" /></div>
+            <div class="field"><label for="tr-opens">Opens</label><input id="tr-opens" type="date" /></div>
+            <div class="field"><label for="tr-deadline">Deadline</label><input id="tr-deadline" type="date" /></div>
+            <div class="field"><label for="tr-status">Status</label><select id="tr-status"></select></div>
+            <div class="field wide"><label for="tr-next">Next action</label><input id="tr-next" placeholder="e.g. Finish online test by Friday" /></div>
+            <div class="field wide"><label for="tr-notes">Notes</label><textarea id="tr-notes" placeholder="Portal username, contacts, anything to remember"></textarea></div>
+          </div>
+          <div class="form-actions">
+            <button type="submit" class="btn btn-primary btn-sm" id="tr-submit">Add to tracker</button>
+            <button type="button" class="btn btn-ghost btn-sm" id="tr-cancel" hidden>Cancel</button>
+          </div>
+        </form>
+      </div>
+
+      <div id="tr-list"></div>
+
+      <div class="pg-nav">
+        <button type="button" class="btn btn-ghost btn-sm" data-goto="find">← Find opportunities</button>
+        <button type="button" class="btn btn-primary btn-sm" data-goto="profiles">Company profiles →</button>
+      </div>
+    </div>
+
+    <!-- ============================== PROFILES ============================== -->
+    <div class="ic-tabpanel" id="tab-profiles" hidden>
+      <div id="co-index">
+        <div class="pg-section">
+          <h2>Company profiles</h2>
+          <p>Everything you need for the cover letter and interview: what the firm does, its spring programme, its values, how it recruits, and angles for "why us". Add your own notes to each profile; they are saved to your account.</p>
+        </div>
+        <div class="co-grid" id="co-grid"></div>
+
+        <div class="form-card" id="co-add-card" hidden>
+          <h3>Add a company</h3>
+          <form id="co-add-form" autocomplete="off">
+            <div class="form-grid">
+              <div class="field"><label for="ca-name">Company name</label><input id="ca-name" required placeholder="e.g. Rothschild & Co" /></div>
+              <div class="field"><label for="ca-type">Type of firm</label><input id="ca-type" placeholder="e.g. Independent advisory bank" /></div>
+              <div class="field"><label for="ca-programme">Spring programme</label><input id="ca-programme" placeholder="Programme name" /></div>
+              <div class="field wide"><label for="ca-overview">Overview</label><textarea id="ca-overview" placeholder="What the firm does, where it's based"></textarea></div>
+              <div class="field"><label for="ca-divisions">Divisions</label><textarea id="ca-divisions" placeholder="One per line"></textarea></div>
+              <div class="field"><label for="ca-values">Values</label><textarea id="ca-values" placeholder="One per line, from the firm's website"></textarea></div>
+              <div class="field"><label for="ca-process">Recruitment process</label><textarea id="ca-process" placeholder="Tests, video interview, assessment centre"></textarea></div>
+            </div>
+            <div class="form-actions">
+              <button type="submit" class="btn btn-primary btn-sm">Save company</button>
+              <button type="button" class="btn btn-ghost btn-sm" id="ca-cancel">Cancel</button>
+            </div>
+          </form>
+        </div>
+
+        <div class="sources">
+          <strong>Sources</strong> (checked September 2026). Opening dates are Trackr's estimates based on last year.
+          <ul>
+            <li>Each firm's official careers and values pages, linked inside every profile</li>
+            <li><a href="https://the-trackr.com/blog/spring-week-timeline-2027-when-uk-finance-firms-open-applications/" target="_blank" rel="noopener">Trackr: Spring week timeline 2027</a></li>
+            <li><a href="https://the-trackr.com/blog/everything-you-need-to-know-about-spring-week-internship-assessments/" target="_blank" rel="noopener">Trackr: Spring week assessments</a></li>
+            <li><a href="https://ionanalytics.com/insights/mergermarket/goldman-sachs-jpmorgan-top-fy25-ma-rankings-in-a-year-where-size-mattered/" target="_blank" rel="noopener">Mergermarket: FY2025 M&amp;A adviser rankings</a></li>
+          </ul>
+        </div>
+
+        <div class="pg-nav">
+          <button type="button" class="btn btn-ghost btn-sm" data-goto="tracker">← My applications</button>
+          <a class="btn btn-primary btn-sm" href="internships.html">Back to the Hub →</a>
+        </div>
+      </div>
+
+      <div id="co-detail" hidden></div>
+    </div>
+  </main>
+</div>
+
+<script src="assets/js/app.js"></script>
+<script src="assets/js/data/companies.js"></script>
+<script>
+  const user = MMApp.requireUser();
+
+  const STATUSES = [
+    { key: 'researching', label: 'Researching', cls: 'st-researching' },
+    { key: 'applied', label: 'Applied', cls: 'st-applied' },
+    { key: 'online-test', label: 'Online test', cls: 'st-progress' },
+    { key: 'video', label: 'Video interview', cls: 'st-progress' },
+    { key: 'assessment', label: 'Assessment centre', cls: 'st-progress' },
+    { key: 'offer', label: 'Offer', cls: 'st-offer' },
+    { key: 'rejected', label: 'Rejected', cls: 'st-closed' },
+    { key: 'withdrawn', label: 'Withdrawn', cls: 'st-closed' }
+  ];
+  const statusOf = k => STATUSES.find(s => s.key === k) || STATUSES[0];
+
+  const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const lines = s => String(s || '').split('\n').map(x => x.trim()).filter(Boolean);
+  const fmtDate = d => d ? new Date(d + 'T00:00:00').toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) : '—';
+
+  /* ---------- Tabs ---------- */
+  let closeCompany = () => {};
+  const tabBtns = document.querySelectorAll('.ic-tab-btn');
+  const panels = {
+    find: document.getElementById('tab-find'),
+    tracker: document.getElementById('tab-tracker'),
+    profiles: document.getElementById('tab-profiles')
+  };
+  function showTab(key) {
+    tabBtns.forEach(b => b.classList.toggle('active', b.dataset.tab === key));
+    Object.entries(panels).forEach(([k, p]) => { p.hidden = k !== key; });
+    if (key === 'profiles') closeCompany();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+  tabBtns.forEach(b => b.addEventListener('click', () => showTab(b.dataset.tab)));
+  document.querySelectorAll('[data-goto]').forEach(b => b.addEventListener('click', () => showTab(b.dataset.goto)));
+
+  if (user) {
+    MMApp.renderSidebar('internship-companies');
+    let progress = MMApp.getProgress(user);
+    let apps = progress.applications || [];
+    let notes = progress.companyNotes || {};
+    let customs = progress.customCompanies || [];
+    let editingId = null;
+
+    const allCompanies = () => [...MM_COMPANIES, ...customs];
+
+    /* ---------- Tracker ---------- */
+    const statusSel = document.getElementById('tr-status');
+    statusSel.innerHTML = STATUSES.map(s => `<option value="${s.key}">${s.label}</option>`).join('');
+
+    function refreshDatalist() {
+      document.getElementById('tr-company-list').innerHTML = allCompanies().map(c => `<option value="${esc(c.name)}"></option>`).join('');
+    }
+
+    function saveApps() { progress = MMApp.setProgress(user, { applications: apps }); }
+
+    function renderStats() {
+      const active = apps.filter(a => !['rejected', 'withdrawn', 'offer'].includes(a.status));
+      const inProcess = apps.filter(a => ['online-test', 'video', 'assessment'].includes(a.status));
+      const today = new Date(); today.setHours(0, 0, 0, 0);
+      const soon = apps.filter(a => a.deadline && a.status === 'researching' && (new Date(a.deadline) - today) / 86400000 <= 14 && new Date(a.deadline) >= today);
+      const stats = [
+        [apps.length, 'Tracked'],
+        [apps.filter(a => a.status !== 'researching').length, 'Applied'],
+        [inProcess.length, 'In process'],
+        [apps.filter(a => a.status === 'offer').length, 'Offers'],
+        [soon.length, 'Due in 14 days']
+      ];
+      document.getElementById('tr-stats').innerHTML = stats.map(([n, l]) => `<div class="stat"><div class="n">${n}</div><div class="l">${l}</div></div>`).join('');
+      return active;
+    }
+
+    function renderApps() {
+      renderStats();
+      const box = document.getElementById('tr-list');
+      if (!apps.length) {
+        box.innerHTML = '<div class="empty">No applications yet. Add the firms you are targeting above, or open a company profile and click "Add to my tracker".</div>';
+        return;
+      }
+      const today = new Date(); today.setHours(0, 0, 0, 0);
+      const sorted = [...apps].sort((a, b) => (a.deadline || '9999').localeCompare(b.deadline || '9999'));
+      box.innerHTML = `<div class="table-wrap"><table class="tr-table">
+        <thead><tr><th>Company</th><th>Programme</th><th>Opens</th><th>Deadline</th><th>Status</th><th>Next action</th><th></th></tr></thead>
+        <tbody>${sorted.map(a => {
+          const dl = a.deadline ? new Date(a.deadline + 'T00:00:00') : null;
+          const days = dl ? Math.round((dl - today) / 86400000) : null;
+          const dlCls = dl && days < 0 ? 'past' : (dl && days <= 14 && a.status === 'researching' ? 'due-soon' : '');
+          const s = statusOf(a.status);
+          return `<tr>
+            <td><strong>${esc(a.company)}</strong>${a.division ? `<div class="small muted">${esc(a.division)}</div>` : ''}</td>
+            <td>${esc(a.programme) || '—'}</td>
+            <td>${fmtDate(a.opens)}</td>
+            <td class="${dlCls}">${fmtDate(a.deadline)}${dl && days >= 0 && days <= 14 && a.status === 'researching' ? `<div class="small">${days === 0 ? 'Today' : days + ' days left'}</div>` : ''}</td>
+            <td><select class="${s.cls}" data-status="${a.id}" aria-label="Status for ${esc(a.company)}">${STATUSES.map(o => `<option value="${o.key}" ${o.key === a.status ? 'selected' : ''}>${o.label}</option>`).join('')}</select></td>
+            <td>${esc(a.next) || '—'}${a.notes ? `<div class="small muted" style="margin-top:4px;">${esc(a.notes)}</div>` : ''}</td>
+            <td style="white-space:nowrap;"><button type="button" class="link-btn" data-edit="${a.id}">Edit</button> · <button type="button" class="link-btn" data-del="${a.id}">Remove</button></td>
+          </tr>`;
+        }).join('')}</tbody></table></div>`;
+
+      box.querySelectorAll('[data-status]').forEach(sel => sel.addEventListener('change', () => {
+        const a = apps.find(x => x.id === sel.dataset.status);
+        a.status = sel.value; saveApps(); renderApps();
+      }));
+      box.querySelectorAll('[data-del]').forEach(b => b.addEventListener('click', () => {
+        apps = apps.filter(x => x.id !== b.dataset.del); saveApps(); renderApps();
+      }));
+      box.querySelectorAll('[data-edit]').forEach(b => b.addEventListener('click', () => startEdit(b.dataset.edit)));
+    }
+
+    const F = id => document.getElementById(id);
+    const FIELDS = { company: 'tr-company', programme: 'tr-programme', division: 'tr-division', opens: 'tr-opens', deadline: 'tr-deadline', status: 'tr-status', next: 'tr-next', notes: 'tr-notes' };
+
+    function resetForm() {
+      F('tr-form').reset(); editingId = null;
+      F('tr-form-title').textContent = 'Add an application';
+      F('tr-submit').textContent = 'Add to tracker';
+      F('tr-cancel').hidden = true;
+    }
+    function startEdit(id) {
+      const a = apps.find(x => x.id === id); if (!a) return;
+      editingId = id;
+      Object.entries(FIELDS).forEach(([k, el]) => { F(el).value = a[k] || ''; });
+      F('tr-form-title').textContent = `Edit: ${a.company}`;
+      F('tr-submit').textContent = 'Save changes';
+      F('tr-cancel').hidden = false;
+      F('tr-form').scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+    F('tr-cancel').addEventListener('click', resetForm);
+
+    F('tr-form').addEventListener('submit', e => {
+      e.preventDefault();
+      const data = {};
+      Object.entries(FIELDS).forEach(([k, el]) => { data[k] = F(el).value.trim(); });
+      if (!data.company) return;
+      if (editingId) {
+        Object.assign(apps.find(x => x.id === editingId), data);
+      } else {
+        apps.push({ id: 'a' + Date.now().toString(36), ...data });
+      }
+      saveApps(); resetForm(); renderApps();
+    });
+
+    // Autofill programme when a known company is typed
+    F('tr-company').addEventListener('change', () => {
+      const c = allCompanies().find(x => x.name.toLowerCase() === F('tr-company').value.trim().toLowerCase());
+      if (c && c.programme && !F('tr-programme').value) F('tr-programme').value = c.programme.name || '';
+    });
+
+    function addToTracker(c) {
+      showTab('tracker');
+      resetForm();
+      F('tr-company').value = c.name;
+      F('tr-programme').value = (c.programme && c.programme.name) || '';
+      F('tr-status').value = 'researching';
+      F('tr-company').focus();
+    }
+
+    /* ---------- Profiles ---------- */
+    function renderGrid() {
+      const grid = document.getElementById('co-grid');
+      grid.innerHTML = allCompanies().map(c => {
+        const n = notes[c.id] || {};
+        const hasNotes = Object.values(n).some(v => (v || '').trim());
+        return `<button type="button" class="co-card ${c.custom ? 'custom' : ''}" data-co="${esc(c.id)}">
+          <span class="nm">${esc(c.name)}</span>
+          <span class="ty">${esc(c.type || '')}</span>
+          ${hasNotes ? '<span class="nt">✓ Your notes added</span>' : ''}
+          <span class="op">${c.programme && c.programme.opens ? 'Opens ' + esc(c.programme.opens) : (c.custom ? 'Your company' : '')}</span>
+        </button>`;
+      }).join('') + '<button type="button" class="co-card add" id="co-add-btn">+ Add a company</button>';
+      grid.querySelectorAll('[data-co]').forEach(b => b.addEventListener('click', () => openCompany(b.dataset.co)));
+      F('co-add-btn').addEventListener('click', () => { F('co-add-card').hidden = false; F('ca-name').focus(); });
+    }
+
+    F('ca-cancel').addEventListener('click', () => { F('co-add-form').reset(); F('co-add-card').hidden = true; });
+    F('co-add-form').addEventListener('submit', e => {
+      e.preventDefault();
+      const name = F('ca-name').value.trim(); if (!name) return;
+      customs.push({
+        id: 'custom-' + Date.now().toString(36), custom: true, name,
+        type: F('ca-type').value.trim(),
+        overview: F('ca-overview').value.trim(),
+        divisions: lines(F('ca-divisions').value),
+        values: lines(F('ca-values').value),
+        process: F('ca-process').value.trim(),
+        programme: { name: F('ca-programme').value.trim() }
+      });
+      progress = MMApp.setProgress(user, { customCompanies: customs });
+      F('co-add-form').reset(); F('co-add-card').hidden = true;
+      renderGrid(); refreshDatalist();
+    });
+
+    const NOTE_FIELDS = [
+      { key: 'why', label: 'Why this firm (my angle)', ph: 'What genuinely draws you here? Link it to something you have done.' },
+      { key: 'news', label: 'Recent news or deals I follow', ph: 'A deal, result or announcement you could talk about.' },
+      { key: 'people', label: 'People I\'ve met or spoken to', ph: 'Name, role, where you met, what they said.' },
+      { key: 'questions', label: 'Questions to ask them', ph: 'Smart questions for an insight day or interview.' }
+    ];
+
+    function openCompany(id) {
+      const c = allCompanies().find(x => x.id === id); if (!c) return;
+      const n = notes[id] || {};
+      const p = c.programme || {};
+      const box = F('co-detail');
+      box.innerHTML = `
+        <button type="button" class="btn btn-ghost btn-sm co-back" id="co-back">← All companies</button>
+        <div class="co-head">
+          <div><h2>${esc(c.name)}</h2><div class="ty">${esc(c.type || '')}</div></div>
+          <button type="button" class="btn btn-primary btn-sm" id="co-track">+ Add to my tracker</button>
+        </div>
+        <div class="co-layout">
+          <div>
+            ${c.overview ? `<div class="co-block"><h4>Overview</h4><p>${esc(c.overview)}</p></div>` : ''}
+            ${c.divisions && c.divisions.length ? `<div class="co-block"><h4>Divisions</h4><div class="chips">${c.divisions.map(d => `<span class="chip">${esc(d)}</span>`).join('')}</div></div>` : ''}
+            ${p.name ? `<div class="co-block"><h4>Spring programme</h4>
+              <dl class="kv">
+                <dt>Name</dt><dd>${esc(p.name)}</dd>
+                ${p.length ? `<dt>Length</dt><dd>${esc(p.length)}</dd>` : ''}
+                ${p.eligibility ? `<dt>Who can apply</dt><dd>${esc(p.eligibility)}</dd>` : ''}
+                ${p.opens ? `<dt>Opens</dt><dd>${esc(p.opens)}</dd>` : ''}
+                ${p.notes ? `<dt>Good to know</dt><dd>${esc(p.notes)}</dd>` : ''}
+              </dl>
+              ${p.url ? `<p class="src"><a href="${esc(p.url)}" target="_blank" rel="noopener">Official programme page →</a></p>` : ''}
+            </div>` : ''}
+            ${c.values && c.values.length ? `<div class="co-block"><h4>Values</h4><ul>${c.values.map(v => `<li>${esc(v)}</li>`).join('')}</ul>
+              ${c.valuesUrl ? `<p class="src">Use their exact words in your cover letter and SJT answers. <a href="${esc(c.valuesUrl)}" target="_blank" rel="noopener">Source</a></p>` : ''}</div>` : ''}
+            ${c.culture && c.culture.length ? `<div class="co-block"><h4>Culture &amp; work environment</h4><ul>${c.culture.map(v => `<li>${esc(v)}</li>`).join('')}</ul></div>` : ''}
+            ${c.process ? `<div class="co-block"><h4>How they recruit</h4><p>${esc(c.process)}</p><p class="src">Formats change each year: your invitation email names the test. See <a href="internship-tests.html">Step 2</a> to prepare.</p></div>` : ''}
+            ${c.whyUs && c.whyUs.length ? `<div class="co-block"><h4>"Why us" starting points</h4><ul>${c.whyUs.map(v => `<li>${esc(v)}</li>`).join('')}</ul><p class="src">These are starting points, not answers. Research one further and connect it to your own experience.</p></div>` : ''}
+          </div>
+          <div class="co-block notes-block">
+            <h4>My notes</h4>
+            ${NOTE_FIELDS.map(f => `<div class="field"><label for="note-${f.key}">${f.label}</label><textarea id="note-${f.key}" data-note="${f.key}" placeholder="${esc(f.ph)}">${esc(n[f.key] || '')}</textarea></div>`).join('')}
+            <div class="form-actions"><span class="saved-note" id="note-saved"></span></div>
+          </div>
+        </div>`;
+      F('co-index').hidden = true; box.hidden = false;
+      F('co-back').addEventListener('click', closeCompany);
+      F('co-track').addEventListener('click', () => addToTracker(c));
+      let t;
+      box.querySelectorAll('[data-note]').forEach(ta => ta.addEventListener('input', () => {
+        notes[id] = { ...(notes[id] || {}), [ta.dataset.note]: ta.value };
+        clearTimeout(t);
+        t = setTimeout(() => {
+          progress = MMApp.setProgress(user, { companyNotes: notes });
+          F('note-saved').textContent = 'Saved';
+          setTimeout(() => { const s = F('note-saved'); if (s) s.textContent = ''; }, 1500);
+        }, 400);
+      }));
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    closeCompany = function () {
+      const d = F('co-detail'); if (!d || d.hidden) return;
+      d.hidden = true; F('co-index').hidden = false; renderGrid();
+    };
+
+    refreshDatalist();
+    renderApps();
+    renderGrid();
+
+    // Deep link: internship-companies.html#tracker or #profiles
+    const hash = location.hash.replace('#', '');
+    if (panels[hash]) showTab(hash);
+  }
+</script>
+</body>
+</html>
