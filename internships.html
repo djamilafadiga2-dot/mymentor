@@ -87,8 +87,7 @@
       title: 'CV & Cover Letter',
       desc: 'Write a one-page UK finance CV and a tailored cover letter, even with limited experience.',
       tags: ['Work experience', 'Clubs & societies', 'Personal projects', 'Sample CV', 'Cover letter structure'],
-      href: 'internship-cv.html',
-      progressKey: 'internshipCvChecklist', total: 11
+      href: 'internship-cv.html'
     },
     {
       num: 2, live: false,
@@ -118,18 +117,12 @@
 
   if (user) {
     MMApp.renderSidebar('internships');
-    const progress = MMApp.getProgress(user);
 
     document.getElementById('ih-steps').innerHTML = STEPS.map(s => {
       let pill = '<span class="pill pill-todo">Coming soon</span>';
       let cta = '';
       if (s.live) {
-        const done = Object.values(progress[s.progressKey] || {}).filter(Boolean).length;
-        pill = done >= s.total
-          ? '<span class="pill pill-done">Complete</span>'
-          : done > 0
-            ? `<span class="pill pill-warn">${done}/${s.total} done</span>`
-            : '<span class="pill pill-todo">Not started</span>';
+        pill = '<span class="pill pill-done">Available</span>';
         cta = `<a class="btn btn-primary btn-sm" href="${s.href}">Open guide →</a>`;
       }
       return `
